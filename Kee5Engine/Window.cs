@@ -22,14 +22,10 @@ namespace Kee5Engine
         public static float screenScaleX, screenScaleY;
 
         private MainShader mainShader;
-        private List<Shader> shaders = new List<Shader>();
-        private List<bool> enabledShaders = new List<bool>();
 
         // Test List of Textures
         public static List<Texture2D> texs = new List<Texture2D>();
 
-        private int numOfShaders = 0, frameBuffer0 = -1, frameBuffer1 = -1;
-        private long frameBufferTexture0 = -1, frameBufferTexture1 = -1;
 
         // Test Sprite
         private Sprite testSprite;
@@ -51,17 +47,11 @@ namespace Kee5Engine
         {
             GL.ClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
-
             // Loading the Shaders
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             string s = GL.GetString(StringName.Vendor);
-            mainShader = new MainShader(s.Equals("ATI Technologies Inc."));
-            AddShader(mainShader);            
-
-            // Create Frame Buffers
-            frameBuffer0 = createFrameBuffer(FramebufferAttachment.ColorAttachment0, ref frameBufferTexture0);
-            frameBuffer1 = createFrameBuffer(FramebufferAttachment.ColorAttachment1, ref frameBufferTexture1);
+            mainShader = new MainShader(s.Equals("ATI Technologies Inc."));        
 
             GL.DrawBuffers(2, new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1 });
 
@@ -122,36 +112,10 @@ namespace Kee5Engine
             }
 
             GL.Viewport(0, 0, Size.X, Size.Y);
+            mainShader.Use();
 
-            int shadersPassed = 0;
-            long prev = -1;
-
-            for (int i = 0; i < shaders.Count; i++)
-            {
-                if (enabledShaders[i])
-                {
-                    shadersPassed++;
-                    int frameBuffer;
-                    long frameBufferTexture;
-
-                    if (shadersPassed %2 == 0)
-                    {
-                        frameBuffer = frameBuffer1;
-                        frameBufferTexture = frameBufferTexture1;
-                    }
-                    else
-                    {
-                        frameBuffer = frameBuffer0;
-                        frameBufferTexture = frameBufferTexture0;
-                    }
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
-                    shaders[i].Use(prev);
-                    prev = frameBufferTexture;
-                }
-            }
-
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            Context.SwapBuffers();
+            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            SwapBuffers();
 
             drawList.Clear();
 
@@ -185,21 +149,6 @@ namespace Kee5Engine
             rtHandler = GL.Arb.GetImageHandle(rt, 0, false, 0, (PixelFormat)0x8058);
 
             return fb;
-        }
-
-        public void AddShader(Shader s, bool enabled = true)
-        {
-            shaders.Add(s);
-            enabledShaders.Add(enabled);
-            numOfShaders += enabled ? 1 : 0;
-        }
-
-        public void SetShaderEnabled(int shaderNum, bool enabled)
-        {
-            if (shaderNum >= enabledShaders.Count) return;
-            numOfShaders -= enabledShaders[shaderNum] ? 1 : 0;
-            numOfShaders += enabled ? 1 : 0;
-            enabledShaders[shaderNum] = enabled;
         }
     }
 

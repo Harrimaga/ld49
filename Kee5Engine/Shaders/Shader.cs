@@ -59,14 +59,14 @@ namespace Kee5Engine.Shaders
             ShaderSetup();
         }
 
-        public void Use(long previous)
+        public void Use()
         {
             GL.UseProgram(Handle);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            Run(previous);
+            Run();
             GL.UseProgram(0);
         }
-
+        
         /// <summary>
         /// For initializing buffers and shit
         /// </summary>
@@ -79,7 +79,7 @@ namespace Kee5Engine.Shaders
         /// Put your code for actually running the shaders in this function.
         /// Gets called by the Use function
         /// </summary>
-        protected virtual void Run(long previous)
+        protected virtual void Run()
         {
 
         }
