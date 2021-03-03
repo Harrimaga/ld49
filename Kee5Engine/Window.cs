@@ -16,23 +16,47 @@ namespace Kee5Engine
 {
     public class Window : GameWindow
     {
-        private static InputHandler inputHandler;
-        public static DrawList drawList = new DrawList();
-        public static List<Sprite> spriteList = new List<Sprite>();
+        // (0, 0) is the center of the screen
+        private readonly float[] _vertices =
+        {
+            // Position         Texture coordinates
+            -1f, -1f, 0.0f, 1.0f, 1.0f, // Bottom-left vertex
+             1f, -1f, 0.0f, 1.0f, 0.0f, // Bottom-right vertex
+             1f,  1f, 0.0f, 0.0f, 0.0f, // Top-right vertex
+            -1f,  1f, 0.0f, 0.0f, 1.0f  // Top-left vertex
+        };
+
+        private readonly uint[] _indices =
+        {
+            0, 1, 3, // Triangle 1 
+            1, 2, 3  // Triangle 2
+        };
+
+        private int _vertexBufferObject;
+
+        private int _vertexArrayObject;
+
+        private Shader _shader;
+
+        private Texture _texture;
+
+        private int _elementBufferObject;
+
+        private double _time;
+
+        private Camera _camera;
+
+        private bool _firstMove = true;
+
+        private Vector2 _lastPost;
+
+        public static InputHandler inputHandler;
         public static float screenScaleX, screenScaleY;
 
-        private MainShader mainShader;
-
-        // Test List of Textures
-        public static List<Texture2D> texs = new List<Texture2D>();
-
-
-        // Test Sprite
-        private Sprite testSprite;
 
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
-            new NativeWindowSettings { Size = new Vector2i(width, height), Title = title})
+            new NativeWindowSettings { Size = new Vector2i(width, height), Title = title })
         {
             // Create InputHandler
             inputHandler = new InputHandler();
@@ -43,157 +67,164 @@ namespace Kee5Engine
             Globals.windowSize = Size;
         }
 
+        // Initialize OpenGL
         protected override void OnLoad()
         {
+            // Set the background colour after we clear it
             GL.ClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
-            // Loading the Shaders
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            string s = GL.GetString(StringName.Vendor);
-            mainShader = new MainShader(s.Equals("ATI Technologies Inc."));
-            mainShader.Use();
+            GL.Enable(EnableCap.DepthTest);
 
-            GL.DrawBuffers(2, new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1 });
+            // Create vbo
+            _vertexBufferObject = GL.GenBuffer();
 
-            texs.Add(new Texture2D("Sprites/Test/Test.png", 1920, 1080, 1920, 1080));
-            testSprite = new Sprite(1920, 1080, 0, texs[0] );
+            // Bind the buffer
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
+
+            // Upload the vertices to the buffer
+            GL.BufferData(
+                BufferTarget.ArrayBuffer,               // Which buffer the data should be sent to
+                _vertices.Length * sizeof(float),       // How much data is being sent, in bytes
+                _vertices,                              // The vertices that are sent
+                BufferUsageHint.StaticDraw              // Bufferusage (Static, Dynamic, Stream)
+                );
+
+            // To let OpenGL know how to use the gibberish mess of bytes that is a vbo, we use a vao (VertexArrayObject)
+
+            // Generate and bind a vao
+            _vertexArrayObject = GL.GenVertexArray();
+            GL.BindVertexArray(_vertexArrayObject);
+
+
+            // Create EBO (element buffer object)
+            _elementBufferObject = GL.GenBuffer();
+
+            // Bind EBO
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
+
+            // Upload data to the EBO
+            GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
+
+            // Create the shaders
+            _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
+
+            // Enable the shader
+            _shader.Use();
+
+            var vertexLocation = _shader.GetAttribLocation("aPosition");
+            GL.EnableVertexAttribArray(vertexLocation);
+
+            // Setup how the vertex shader interprets the VBO data
+            GL.VertexAttribPointer(
+                vertexLocation,                     // Location of the input variable in the shader (The layout(location = x) line)
+                3,                                  // How many elements will be sent
+                VertexAttribPointerType.Float,      // The data type of the elements
+                false,                              // Whether or not the data should be converted to normalized device coordinates
+                5 * sizeof(float),                  // How many bytes are between the last element of one vertex, and the first element of the next
+                0                                   // How many bytes to skip to find the first element of the first vertex
+                );
+
+            // Setup texture coordinates
+            var texCoordLocation = _shader.GetAttribLocation("aTexCoord");
+            GL.EnableVertexAttribArray(texCoordLocation);
+            
+            // Skip 3 * sizeof(float) bytes as the texture coordinates come after the position coordinates
+            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
+            _texture = Texture.LoadFromFile("Sprites/Test/Test.png");
+            _texture.Use(TextureUnit.Texture0);
+
+            // Initiate the camera
+            _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y, 1.5f, 0.2f);
+
+            CursorGrabbed = true;
 
             base.OnLoad();
         }
 
-        protected override void OnResize(ResizeEventArgs e)
-        {
-            Size = e.Size;
-            GL.Viewport(0, 0, Size.X, Size.Y);
-            screenScaleX = Size.X / 1920.0f;
-            screenScaleY = Size.Y / 1080.0f;
-
-            Globals.windowSize = Size;
-
-            base.OnResize(e);
-        }
-
-        protected override void OnUpdateFrame(FrameEventArgs args)
-        {
-            // Will be executed every update tick
-            // Updates are every 1/UpdateFrequency (60) seconds
-
-            // Update the inputHandler first
-            inputHandler.Update(KeyboardState);
-
-            // Quit the Game
-            if (inputHandler.IsKeyDown(Keys.Escape))
-            {
-                Close();
-            }
-
-
-            base.OnUpdateFrame(args);
-        }
-
+        // Create Render loop
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            // Will be executed every Render Frame
-            // Render frames are every 1/RenderFrequency (60) seconds
+            // Clear the image
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            // Bind the VAO
+            // Because the EBO is a proberty of the currently bound VAO
+            // the EBO will change with the VAO
+            GL.BindVertexArray(_vertexArrayObject);
 
-            // Draw test Sprite
-            testSprite.Draw(0, 0);
+            _texture.Use(TextureUnit.Texture0);
 
-            //foreach (Sprite sprite in spriteList)
-            //{
-            //    sprite.MakeImageHandleResident();
-            //}
+            // Bind the shader
+            _shader.Use();
 
-            foreach (Texture2D texture in texs)
-            {
-                GL.Arb.MakeImageHandleResident(texture.Handle, All.ReadOnly);
-            }
+            // Model matrix, determines the position of the model
+            var model = Matrix4.Identity;
 
-            GL.Viewport(0, 0, Size.X, Size.Y);
-            mainShader.Use();
+            // Pass all the matrices to the vertex shader
+            _shader.SetMatrix4("model", model);
+            _shader.SetMatrix4("view", _camera.GetViewMatrix());
+            _shader.SetMatrix4("projection", _camera.GetProjectionMatrix());
 
-            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            // Call Drawing function
+            GL.DrawElements(
+                PrimitiveType.Triangles,        // Primitive type
+                _indices.Length,                // How many indices should be drawn
+                DrawElementsType.UnsignedInt,   // Data type of the indices
+                0                               // Offset in the EBO
+                );
+
+            // Swap the buffers to render on screen
             SwapBuffers();
-
-            drawList.Clear();
-
-            //foreach (Sprite sprite in spriteList)
-            //{
-            //    sprite.MakeImageHandleNonResident(sprite.texture);
-            //}
-
-            foreach (Texture2D texture in texs)
-            {
-                GL.Arb.MakeImageHandleNonResident(texture.Handle);
-            }
 
             base.OnRenderFrame(args);
         }
 
-        //private int createFrameBuffer(FramebufferAttachment fba, ref long rtHandler)
-        //{
-        //    int fb = GL.GenFramebuffer();
-        //    GL.BindFramebuffer(FramebufferTarget.Framebuffer, fb);
-
-        //    int rt = GL.GenTexture();
-        //    GL.BindTexture(TextureTarget.Texture2D, rt);
-        //    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, Size.X, Size.Y, 0, PixelFormat.Rgba, PixelType.UnsignedByte, new IntPtr());
-
-        //    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, 0x2601);
-        //    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 0x2601);
-
-        //    GL.FramebufferTexture(FramebufferTarget.Framebuffer, fba, rt, 0);
-
-        //    rtHandler = GL.Arb.GetImageHandle(rt, 0, false, 0, (PixelFormat)0x8058);
-
-        //    return fb;
-        //}
-    }
-
-    public class DrawList
-    {
-
-        public SData[] data;
-        private int size = 0, max = 10;
-
-        public DrawList()
+        protected override void OnUpdateFrame(FrameEventArgs args)
         {
-            data = new SData[max];
-        }
-
-        public void Add(SData s)
-        {
-            if (size == max)
+            if (!IsFocused)
             {
-                SData[] n = new SData[max * 2];
-                for (int i = 0; i < max; i++)
-                {
-                    n[i] = data[i];
-                }
-                data = n;
-                max *= 2;
+                return;
             }
-            data[size] = s;
-            size++;
+
+            // Update the InputHandler
+            inputHandler.Update(KeyboardState);
+
+            _camera.Update(args.Time);
+
+            // Check if the Escape button is pressed
+            if (inputHandler.IsKeyDown(Keys.Escape))
+            {
+                // Close the window
+                Close();
+            }
+
+            base.OnUpdateFrame(args);
         }
 
-        public SData[] getData()
+        protected override void OnResize(ResizeEventArgs e)
         {
-            return data;
+            // Call GL.viewport to resize OpenGL's viewport to match the new size
+            GL.Viewport(0, 0, Size.X, Size.Y);
+            _camera.AspectRatio = Size.X / (float)Size.Y;
+            base.OnResize(e);
         }
 
-        public void Clear()
+        protected override void OnUnload()
         {
-            size = 0;
-        }
+            // Unload all the resources
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GL.BindVertexArray(0);
+            GL.UseProgram(0);
 
-        public int Count()
-        {
-            return size;
-        }
+            // Delete all the resources
+            GL.DeleteBuffer(_vertexArrayObject);
+            GL.DeleteVertexArray(_vertexArrayObject);
 
+            GL.DeleteProgram(_shader.Handle);
+            GL.DeleteTexture(_texture.Handle);
+
+            base.OnUnload();
+        }
     }
 }
