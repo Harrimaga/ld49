@@ -51,7 +51,8 @@ namespace Kee5Engine
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             string s = GL.GetString(StringName.Vendor);
-            mainShader = new MainShader(s.Equals("ATI Technologies Inc."));        
+            mainShader = new MainShader(s.Equals("ATI Technologies Inc."));
+            mainShader.Use();
 
             GL.DrawBuffers(2, new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1 });
 
@@ -132,24 +133,24 @@ namespace Kee5Engine
             base.OnRenderFrame(args);
         }
 
-        private int createFrameBuffer(FramebufferAttachment fba, ref long rtHandler)
-        {
-            int fb = GL.GenFramebuffer();
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, fb);
+        //private int createFrameBuffer(FramebufferAttachment fba, ref long rtHandler)
+        //{
+        //    int fb = GL.GenFramebuffer();
+        //    GL.BindFramebuffer(FramebufferTarget.Framebuffer, fb);
 
-            int rt = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, rt);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, Size.X, Size.Y, 0, PixelFormat.Rgba, PixelType.UnsignedByte, new IntPtr());
+        //    int rt = GL.GenTexture();
+        //    GL.BindTexture(TextureTarget.Texture2D, rt);
+        //    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, Size.X, Size.Y, 0, PixelFormat.Rgba, PixelType.UnsignedByte, new IntPtr());
 
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, 0x2601);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 0x2601);
+        //    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, 0x2601);
+        //    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 0x2601);
 
-            GL.FramebufferTexture(FramebufferTarget.Framebuffer, fba, rt, 0);
+        //    GL.FramebufferTexture(FramebufferTarget.Framebuffer, fba, rt, 0);
 
-            rtHandler = GL.Arb.GetImageHandle(rt, 0, false, 0, (PixelFormat)0x8058);
+        //    rtHandler = GL.Arb.GetImageHandle(rt, 0, false, 0, (PixelFormat)0x8058);
 
-            return fb;
-        }
+        //    return fb;
+        //}
     }
 
     public class DrawList

@@ -28,11 +28,13 @@ namespace Kee5Engine.Shaders
         {
             base.ShaderSetup();
 
-            vbo = GL.GenBuffer();
             vao = GL.GenVertexArray();
+            GL.BindVertexArray(vao);
+
+            vbo = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
             GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * data.Length, data, BufferUsageHint.StaticDraw);
-            GL.BindVertexArray(vao);
+            
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
 
@@ -43,12 +45,14 @@ namespace Kee5Engine.Shaders
 
         protected override void Run()
         {
+            GL.BindVertexArray(vao);
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
             SData[] sdd = Window.drawList.getData();
             int num = Window.drawList.Count();
-            GL.BindVertexArray(vao);
+            
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-            GL.BindVertexArray(vao);
+
             GL.BindBufferBase(BufferRangeTarget.ShaderStorageBuffer, 0, ssbo);
             GL.BufferData<SData>(BufferTarget.ShaderStorageBuffer, (sizeof(int) * 5 + 1 * sizeof(long) + 9 * sizeof(float)) * num, sdd, BufferUsageHint.DynamicDraw);
             GL.Uniform2(GL.GetUniformLocation(Handle, "screenSize"), Globals.windowSize.X, Globals.windowSize.Y);
