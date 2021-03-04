@@ -77,7 +77,7 @@ namespace Kee5Engine
         protected override void OnLoad()
         {
             // Set the background colour after we clear it
-            GL.ClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+            GL.ClearColor(0.05f, 0.05f, 0.05f, 1f);
 
             GL.Enable(EnableCap.DepthTest);
 

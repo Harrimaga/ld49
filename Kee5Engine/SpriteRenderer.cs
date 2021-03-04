@@ -34,10 +34,8 @@ namespace Kee5Engine
 
         public void DrawSprite(Texture texture, Vector2 position, Vector2 size, float rotation, Vector4 color)
         {
-            _shader.Use();
             Matrix4 model = Matrix4.Identity;
             model *= Matrix4.CreateScale(size.X, size.Y, 1f);
-            
             model *= Matrix4.CreateRotationZ(rotation);
             model *= Matrix4.CreateTranslation(position.X - size.X / 2, position.Y - size.Y / 2, 1f);
 
