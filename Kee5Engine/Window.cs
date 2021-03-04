@@ -40,15 +40,19 @@ namespace Kee5Engine
 
         private Texture _texture;
 
+        public static TextureList textures;
+
         private int _elementBufferObject;
 
         private double _time;
 
-        private Camera _camera;
+        public static Camera camera;
 
         private bool _firstMove = true;
 
         private Vector2 _lastPost;
+
+        public SpriteRenderer spriteRenderer;
 
         public static InputHandler inputHandler;
         public static float screenScaleX, screenScaleY;
@@ -60,6 +64,8 @@ namespace Kee5Engine
         {
             // Create InputHandler
             inputHandler = new InputHandler();
+
+            textures = new TextureList();
 
             // Determine Screen Scale
             screenScaleX = width / 1920;
@@ -111,6 +117,8 @@ namespace Kee5Engine
             // Enable the shader
             _shader.Use();
 
+            spriteRenderer = new SpriteRenderer(_shader);
+
             var vertexLocation = _shader.GetAttribLocation("aPosition");
             GL.EnableVertexAttribArray(vertexLocation);
 
@@ -131,11 +139,11 @@ namespace Kee5Engine
             // Skip 3 * sizeof(float) bytes as the texture coordinates come after the position coordinates
             GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
 
-            _texture = Texture.LoadFromFile("Sprites/Test/Test.png");
-            _texture.Use(TextureUnit.Texture0);
+            textures.LoadTexture("Sprites/Test/Test.png", "Test");
+            textures.GetTexture("Test").Use(TextureUnit.Texture0);
 
             // Initiate the camera
-            _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y, 1.5f, 0.2f);
+            camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y, 1.5f, 0.2f);
 
             CursorGrabbed = true;
 
@@ -145,6 +153,7 @@ namespace Kee5Engine
         // Create Render loop
         protected override void OnRenderFrame(FrameEventArgs args)
         {
+            Title = $"Game | FPS: {Math.Round(1 / args.Time)}";
             // Clear the image
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
@@ -153,18 +162,17 @@ namespace Kee5Engine
             // the EBO will change with the VAO
             GL.BindVertexArray(_vertexArrayObject);
 
-            _texture.Use(TextureUnit.Texture0);
-
             // Bind the shader
             _shader.Use();
+            _shader.SetMatrix4("view", camera.GetViewMatrix());
+            _shader.SetMatrix4("projection", camera.GetProjectionMatrix());
 
-            // Model matrix, determines the position of the model
-            var model = Matrix4.Identity;
+            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(-0.5f, 0.5f), new Vector2(0.2f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
+            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(0.5f, 0.5f), new Vector2(0.2f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
 
-            // Pass all the matrices to the vertex shader
-            _shader.SetMatrix4("model", model);
-            _shader.SetMatrix4("view", _camera.GetViewMatrix());
-            _shader.SetMatrix4("projection", _camera.GetProjectionMatrix());
+            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(0f, -0.5f), new Vector2(0.7f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
+            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(0.5f, -0.1f), new Vector2(0.2f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
+            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(-0.5f, -0.1f), new Vector2(0.2f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
 
             // Call Drawing function
             GL.DrawElements(
@@ -190,7 +198,7 @@ namespace Kee5Engine
             // Update the InputHandler
             inputHandler.Update(KeyboardState);
 
-            _camera.Update(args.Time);
+            camera.Update(args.Time);
 
             // Check if the Escape button is pressed
             if (inputHandler.IsKeyDown(Keys.Escape))
@@ -206,7 +214,7 @@ namespace Kee5Engine
         {
             // Call GL.viewport to resize OpenGL's viewport to match the new size
             GL.Viewport(0, 0, Size.X, Size.Y);
-            _camera.AspectRatio = Size.X / (float)Size.Y;
+            camera.AspectRatio = Size.X / (float)Size.Y;
             base.OnResize(e);
         }
 
@@ -222,7 +230,7 @@ namespace Kee5Engine
             GL.DeleteVertexArray(_vertexArrayObject);
 
             GL.DeleteProgram(_shader.Handle);
-            GL.DeleteTexture(_texture.Handle);
+            textures.UnLoad();
 
             base.OnUnload();
         }

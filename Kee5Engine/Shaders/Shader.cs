@@ -143,5 +143,11 @@ namespace Kee5Engine.Shaders
             GL.UseProgram(Handle);
             GL.Uniform3(_uniformLocations[name], data);
         }
+
+        public void SetVector4(string name, Vector4 data)
+        {
+            GL.UseProgram(Handle);
+            GL.Uniform4(_uniformLocations[name], data);
+        }
     }
 }
