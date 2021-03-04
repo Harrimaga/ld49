@@ -16,26 +16,56 @@ namespace Kee5Engine
 {
     public class Window : GameWindow
     {
-        private static InputHandler inputHandler;
-        public static DrawList drawList = new DrawList();
-        public static List<Sprite> spriteList = new List<Sprite>();
+        // (0, 0) is the center of the screen
+        private readonly float[] _vertices =
+        {
+            // Position         Texture coordinates
+            -1f, -1f, 0.0f, 1.0f, 1.0f, // Bottom-left vertex
+             1f, -1f, 0.0f, 1.0f, 0.0f, // Bottom-right vertex
+             1f,  1f, 0.0f, 0.0f, 0.0f, // Top-right vertex
+            -1f,  1f, 0.0f, 0.0f, 1.0f  // Top-left vertex
+        };
+
+        private readonly uint[] _indices =
+        {
+            0, 1, 3, // Triangle 1 
+            1, 2, 3  // Triangle 2
+        };
+
+        private int _vertexBufferObject;
+
+        private int _vertexArrayObject;
+
+        private Shader _shader;
+
+        private Texture _texture;
+
+        public static TextureList textures;
+
+        private int _elementBufferObject;
+
+        private double _time;
+
+        public static Camera camera;
+
+        private bool _firstMove = true;
+
+        private Vector2 _lastPost;
+
+        public static SpriteRenderer spriteRenderer;
+
+        public static InputHandler inputHandler;
         public static float screenScaleX, screenScaleY;
 
-        private MainShader mainShader;
-
-        // Test List of Textures
-        public static List<Texture2D> texs = new List<Texture2D>();
-
-
-        // Test Sprite
-        private Sprite testSprite;
 
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
-            new NativeWindowSettings { Size = new Vector2i(width, height), Title = title})
+            new NativeWindowSettings { Size = new Vector2i(width, height), Title = title })
         {
             // Create InputHandler
             inputHandler = new InputHandler();
+
+            textures = new TextureList();
 
             // Determine Screen Scale
             screenScaleX = width / 1920;
@@ -43,157 +73,105 @@ namespace Kee5Engine
             Globals.windowSize = Size;
         }
 
+        // Initialize OpenGL
         protected override void OnLoad()
         {
+            // Set the background colour after we clear it
             GL.ClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
-            // Loading the Shaders
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            string s = GL.GetString(StringName.Vendor);
-            mainShader = new MainShader(s.Equals("ATI Technologies Inc."));
-            mainShader.Use();
+            GL.Enable(EnableCap.DepthTest);
 
-            GL.DrawBuffers(2, new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1 });
+            // Create the shaders
+            _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
-            texs.Add(new Texture2D("Sprites/Test/Test.png", 1920, 1080, 1920, 1080));
-            testSprite = new Sprite(1920, 1080, 0, texs[0] );
+            // Enable the shader
+            _shader.Use();
+
+            spriteRenderer = new SpriteRenderer(_shader);
+
+            textures.LoadTexture("Sprites/Test/Test.png", "Test");
+
+            // Initiate the camera
+            camera = new Camera(new Vector3(0, 0, 10f), Size.X / (float)Size.Y, 100f, 0.2f);
+
+            CursorGrabbed = true;
 
             base.OnLoad();
         }
 
-        protected override void OnResize(ResizeEventArgs e)
-        {
-            Size = e.Size;
-            GL.Viewport(0, 0, Size.X, Size.Y);
-            screenScaleX = Size.X / 1920.0f;
-            screenScaleY = Size.Y / 1080.0f;
-
-            Globals.windowSize = Size;
-
-            base.OnResize(e);
-        }
-
-        protected override void OnUpdateFrame(FrameEventArgs args)
-        {
-            // Will be executed every update tick
-            // Updates are every 1/UpdateFrequency (60) seconds
-
-            // Update the inputHandler first
-            inputHandler.Update(KeyboardState);
-
-            // Quit the Game
-            if (inputHandler.IsKeyDown(Keys.Escape))
-            {
-                Close();
-            }
-
-
-            base.OnUpdateFrame(args);
-        }
-
+        // Create Render loop
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            // Will be executed every Render Frame
-            // Render frames are every 1/RenderFrequency (60) seconds
+            Title = $"Game | FPS: {Math.Round(1 / args.Time)}";
+            // Clear the image
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            // Bind the shader
+            _shader.Use();
+            _shader.SetMatrix4("view", camera.GetViewMatrix());
+            _shader.SetMatrix4("projection", camera.GetProjectionMatrix());
 
-            // Draw test Sprite
-            testSprite.Draw(0, 0);
+            // Draw a Sprite:
+            // Window.spriteRenderer is static, so draws can be made anywhere
+            spriteRenderer.DrawSprite(
+                textures.GetTexture("Test"),        // Texture
+                new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
+                new Vector2(1920f, 1080f),          // Size
+                0f,                                 // Rotation
+                new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
+                );
 
-            //foreach (Sprite sprite in spriteList)
-            //{
-            //    sprite.MakeImageHandleResident();
-            //}
-
-            foreach (Texture2D texture in texs)
-            {
-                GL.Arb.MakeImageHandleResident(texture.Handle, All.ReadOnly);
-            }
-
-            GL.Viewport(0, 0, Size.X, Size.Y);
-            mainShader.Use();
-
-            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            // Swap the buffers to render on screen
             SwapBuffers();
-
-            drawList.Clear();
-
-            //foreach (Sprite sprite in spriteList)
-            //{
-            //    sprite.MakeImageHandleNonResident(sprite.texture);
-            //}
-
-            foreach (Texture2D texture in texs)
-            {
-                GL.Arb.MakeImageHandleNonResident(texture.Handle);
-            }
 
             base.OnRenderFrame(args);
         }
 
-        //private int createFrameBuffer(FramebufferAttachment fba, ref long rtHandler)
-        //{
-        //    int fb = GL.GenFramebuffer();
-        //    GL.BindFramebuffer(FramebufferTarget.Framebuffer, fb);
-
-        //    int rt = GL.GenTexture();
-        //    GL.BindTexture(TextureTarget.Texture2D, rt);
-        //    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, Size.X, Size.Y, 0, PixelFormat.Rgba, PixelType.UnsignedByte, new IntPtr());
-
-        //    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, 0x2601);
-        //    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 0x2601);
-
-        //    GL.FramebufferTexture(FramebufferTarget.Framebuffer, fba, rt, 0);
-
-        //    rtHandler = GL.Arb.GetImageHandle(rt, 0, false, 0, (PixelFormat)0x8058);
-
-        //    return fb;
-        //}
-    }
-
-    public class DrawList
-    {
-
-        public SData[] data;
-        private int size = 0, max = 10;
-
-        public DrawList()
+        protected override void OnUpdateFrame(FrameEventArgs args)
         {
-            data = new SData[max];
-        }
-
-        public void Add(SData s)
-        {
-            if (size == max)
+            if (!IsFocused)
             {
-                SData[] n = new SData[max * 2];
-                for (int i = 0; i < max; i++)
-                {
-                    n[i] = data[i];
-                }
-                data = n;
-                max *= 2;
+                return;
             }
-            data[size] = s;
-            size++;
+
+            // Update the InputHandler
+            inputHandler.Update(KeyboardState);
+
+            camera.Update(args.Time);
+
+            // Check if the Escape button is pressed
+            if (inputHandler.IsKeyDown(Keys.Escape))
+            {
+                // Close the window
+                Close();
+            }
+
+            base.OnUpdateFrame(args);
         }
 
-        public SData[] getData()
+        protected override void OnResize(ResizeEventArgs e)
         {
-            return data;
+            // Call GL.viewport to resize OpenGL's viewport to match the new size
+            GL.Viewport(0, 0, Size.X, Size.Y);
+            camera.AspectRatio = Size.X / (float)Size.Y;
+            base.OnResize(e);
         }
 
-        public void Clear()
+        protected override void OnUnload()
         {
-            size = 0;
-        }
+            // Unload all the resources
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GL.BindVertexArray(0);
+            GL.UseProgram(0);
 
-        public int Count()
-        {
-            return size;
-        }
+            // Delete all the resources
+            GL.DeleteBuffer(_vertexArrayObject);
+            GL.DeleteVertexArray(_vertexArrayObject);
 
+            GL.DeleteProgram(_shader.Handle);
+            textures.UnLoad();
+
+            base.OnUnload();
+        }
     }
 }
