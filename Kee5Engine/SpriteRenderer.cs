@@ -13,13 +13,13 @@ namespace Kee5Engine
         private readonly float[] _vertices =
         {
             // Position Texture coordinates
-            -1f, -1f,   1.0f, 1.0f, // Bottom-left vertex
-             1f, -1f,   1.0f, 0.0f, // Bottom-right vertex
-             1f,  1f,   0.0f, 0.0f, // Top-right vertex
+            1f, 1f,   1.0f, 1.0f, // Bottom-left vertex
+            1f, 0f,   1.0f, 0.0f, // Bottom-right vertex
+            0f, 0f,   0.0f, 0.0f, // Top-right vertex
 
-            -1f, -1f,   1.0f, 1.0f, // Bottom-left vertex
-             1f,  1f,   0.0f, 0.0f, // Top-right vertex
-            -1f,  1f,   0.0f, 1.0f  // Top-left vertex
+            1f, 1f,   1.0f, 1.0f, // Bottom-left vertex
+            0f, 0f,   0.0f, 0.0f, // Top-right vertex
+            0f, 1f,   0.0f, 1.0f  // Top-left vertex
         };
 
         private Shader _shader;
@@ -37,11 +37,12 @@ namespace Kee5Engine
             _shader.Use();
             Matrix4 model = Matrix4.Identity;
             model *= Matrix4.CreateScale(size.X, size.Y, 1f);
+            
             model *= Matrix4.CreateRotationZ(rotation);
-            model *= Matrix4.CreateTranslation(position.X, position.Y, 1f);
+            model *= Matrix4.CreateTranslation(position.X - size.X / 2, position.Y - size.Y / 2, 1f);
 
             _shader.SetMatrix4("model", model);
-            //_shader.SetVector4("spriteColor", color);
+            _shader.SetVector4("spriteColor", color);
 
             GL.ActiveTexture(TextureUnit.Texture0);
             texture.Use(TextureUnit.Texture0);

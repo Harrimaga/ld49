@@ -81,7 +81,7 @@ namespace Kee5Engine
 
         public Matrix4 GetProjectionMatrix()
         {
-            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 100f);
+            return Matrix4.CreateOrthographicOffCenter(0, Globals.windowSize.X, Globals.windowSize.Y, 0, 0.01f, 100f);
         }
 
         // Spooky Math
@@ -111,12 +111,12 @@ namespace Kee5Engine
 
             if (Window.inputHandler.IsKeyDown(Keys.A))
             {
-                Position += Right * Speed * (float)deltaTime;
+                Position -= Right * Speed * (float)deltaTime;
             }
 
             if (Window.inputHandler.IsKeyDown(Keys.D))
             {
-                Position -= Right * Speed * (float)deltaTime;
+                Position += Right * Speed * (float)deltaTime;
             }
         }
     }

@@ -52,7 +52,7 @@ namespace Kee5Engine
 
         private Vector2 _lastPost;
 
-        public SpriteRenderer spriteRenderer;
+        public static SpriteRenderer spriteRenderer;
 
         public static InputHandler inputHandler;
         public static float screenScaleX, screenScaleY;
@@ -81,36 +81,6 @@ namespace Kee5Engine
 
             GL.Enable(EnableCap.DepthTest);
 
-            // Create vbo
-            _vertexBufferObject = GL.GenBuffer();
-
-            // Bind the buffer
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-
-            // Upload the vertices to the buffer
-            GL.BufferData(
-                BufferTarget.ArrayBuffer,               // Which buffer the data should be sent to
-                _vertices.Length * sizeof(float),       // How much data is being sent, in bytes
-                _vertices,                              // The vertices that are sent
-                BufferUsageHint.StaticDraw              // Bufferusage (Static, Dynamic, Stream)
-                );
-
-            // To let OpenGL know how to use the gibberish mess of bytes that is a vbo, we use a vao (VertexArrayObject)
-
-            // Generate and bind a vao
-            _vertexArrayObject = GL.GenVertexArray();
-            GL.BindVertexArray(_vertexArrayObject);
-
-
-            // Create EBO (element buffer object)
-            _elementBufferObject = GL.GenBuffer();
-
-            // Bind EBO
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
-
-            // Upload data to the EBO
-            GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
-
             // Create the shaders
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
 
@@ -119,31 +89,10 @@ namespace Kee5Engine
 
             spriteRenderer = new SpriteRenderer(_shader);
 
-            var vertexLocation = _shader.GetAttribLocation("aPosition");
-            GL.EnableVertexAttribArray(vertexLocation);
-
-            // Setup how the vertex shader interprets the VBO data
-            GL.VertexAttribPointer(
-                vertexLocation,                     // Location of the input variable in the shader (The layout(location = x) line)
-                3,                                  // How many elements will be sent
-                VertexAttribPointerType.Float,      // The data type of the elements
-                false,                              // Whether or not the data should be converted to normalized device coordinates
-                5 * sizeof(float),                  // How many bytes are between the last element of one vertex, and the first element of the next
-                0                                   // How many bytes to skip to find the first element of the first vertex
-                );
-
-            // Setup texture coordinates
-            var texCoordLocation = _shader.GetAttribLocation("aTexCoord");
-            GL.EnableVertexAttribArray(texCoordLocation);
-            
-            // Skip 3 * sizeof(float) bytes as the texture coordinates come after the position coordinates
-            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
-
             textures.LoadTexture("Sprites/Test/Test.png", "Test");
-            textures.GetTexture("Test").Use(TextureUnit.Texture0);
 
             // Initiate the camera
-            camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y, 1.5f, 0.2f);
+            camera = new Camera(new Vector3(0, 0, 10f), Size.X / (float)Size.Y, 100f, 0.2f);
 
             CursorGrabbed = true;
 
@@ -157,29 +106,19 @@ namespace Kee5Engine
             // Clear the image
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            // Bind the VAO
-            // Because the EBO is a proberty of the currently bound VAO
-            // the EBO will change with the VAO
-            GL.BindVertexArray(_vertexArrayObject);
-
             // Bind the shader
             _shader.Use();
             _shader.SetMatrix4("view", camera.GetViewMatrix());
             _shader.SetMatrix4("projection", camera.GetProjectionMatrix());
 
-            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(-0.5f, 0.5f), new Vector2(0.2f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
-            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(0.5f, 0.5f), new Vector2(0.2f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
-
-            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(0f, -0.5f), new Vector2(0.7f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
-            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(0.5f, -0.1f), new Vector2(0.2f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
-            spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(-0.5f, -0.1f), new Vector2(0.2f, 0.2f), 0f, new Vector4(1, 1, 1, 1));
-
-            // Call Drawing function
-            GL.DrawElements(
-                PrimitiveType.Triangles,        // Primitive type
-                _indices.Length,                // How many indices should be drawn
-                DrawElementsType.UnsignedInt,   // Data type of the indices
-                0                               // Offset in the EBO
+            // Draw a Sprite:
+            // Window.spriteRenderer is static, so draws can be made anywhere
+            spriteRenderer.DrawSprite(
+                textures.GetTexture("Test"),        // Texture
+                new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
+                new Vector2(1920f, 1080f),          // Size
+                0f,                                 // Rotation
+                new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
                 );
 
             // Swap the buffers to render on screen
