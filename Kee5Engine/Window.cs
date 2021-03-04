@@ -87,13 +87,13 @@ namespace Kee5Engine
             // Enable the shader
             _shader.Use();
 
+            // Create the sprite renderer
             spriteRenderer = new SpriteRenderer(_shader);
-
-            textures.LoadTexture("Sprites/Test/Test.png", "Test");
 
             // Initiate the camera
             camera = new Camera(new Vector3(0, 0, 10f), Size.X / (float)Size.Y, 100f, 0.2f);
 
+            // Remove mouse from screen :)
             CursorGrabbed = true;
 
             base.OnLoad();

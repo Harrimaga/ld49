@@ -12,6 +12,12 @@ namespace Kee5Engine
         public TextureList()
         {
             _textures = new Dictionary<string, Texture>();
+            init();
+        }
+
+        public void init()
+        {
+            LoadTexture("Sprites/Test/Test.png", "Test");
         }
 
         public void LoadTexture(string path, string name)
