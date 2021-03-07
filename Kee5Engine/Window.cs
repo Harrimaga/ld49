@@ -57,6 +57,8 @@ namespace Kee5Engine
         public static InputHandler inputHandler;
         public static float screenScaleX, screenScaleY;
 
+        public static Vector2 WindowSize { get; private set; }
+
 
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
@@ -66,6 +68,8 @@ namespace Kee5Engine
             inputHandler = new InputHandler();
 
             textures = new TextureList();
+
+            WindowSize = Size;
 
             // Determine Screen Scale
             screenScaleX = width / 1920;

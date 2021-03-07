@@ -34,6 +34,13 @@ namespace Kee5Engine
 
         public void DrawSprite(Texture texture, Vector2 position, Vector2 size, float rotation, Vector4 color)
         {
+            if (position.X - Window.camera.Position.X > Window.WindowSize.X + 100 + size.X / 2
+                || position.Y - Window.camera.Position.Y > Window.WindowSize.Y + 100 + size.Y / 2
+                || position.X - Window.camera.Position.X < -100 - size.X / 2
+                || position.Y - Window.camera.Position.Y < -100 - size.Y / 2)
+            {
+                return;
+            }
             Matrix4 model = Matrix4.Identity;
             model *= Matrix4.CreateScale(size.X, size.Y, 1f);
             model *= Matrix4.CreateRotationZ(rotation);
