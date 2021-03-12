@@ -97,8 +97,8 @@ namespace Kee5Engine
             // Initiate the camera
             camera = new Camera(new Vector3(0, 0, 10f), Size.X / (float)Size.Y, 100f, 0.2f);
 
-            // Remove mouse from screen :)
-            CursorGrabbed = true;
+            // Don't Remove mouse from screen :)
+            CursorGrabbed = false;
 
             base.OnLoad();
         }
@@ -124,6 +124,8 @@ namespace Kee5Engine
                 0f,                                 // Rotation
                 new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
                 );
+
+            spriteRenderer.OnRenderFrame();
 
             // Swap the buffers to render on screen
             SwapBuffers();

@@ -2,6 +2,7 @@
 
 out vec4 outputColor;
 
+in vec4 vColor;
 in vec2 texCoord;
 
 // sampler2d is a representation fo a texture in a shader
