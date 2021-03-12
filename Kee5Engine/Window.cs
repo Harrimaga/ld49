@@ -32,6 +32,8 @@ namespace Kee5Engine
             1, 2, 3  // Triangle 2
         };
 
+        public static double timeElapsed = 0;
+
         private int _vertexBufferObject;
 
         private int _vertexArrayObject;
@@ -98,7 +100,7 @@ namespace Kee5Engine
             camera = new Camera(new Vector3(0, 0, 10f), Size.X / (float)Size.Y, 100f, 0.2f);
 
             // Remove mouse from screen :)
-            CursorGrabbed = true;
+            CursorGrabbed = false;
 
             base.OnLoad();
         }
@@ -133,6 +135,8 @@ namespace Kee5Engine
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
+            timeElapsed += args.Time;
+
             if (!IsFocused)
             {
                 return;
