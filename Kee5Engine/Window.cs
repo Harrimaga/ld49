@@ -59,6 +59,8 @@ namespace Kee5Engine
         public static InputHandler inputHandler;
         public static float screenScaleX, screenScaleY;
 
+        public static int drawCalls = 0, spritesDrawn = 0;
+
         public static Vector2 WindowSize { get; private set; }
 
 
@@ -108,9 +110,13 @@ namespace Kee5Engine
         // Create Render loop
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            Title = $"Game | FPS: {Math.Round(1 / args.Time)}";
+            drawCalls = 0;
+            spritesDrawn = 0;
+            
             // Clear the image
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            spriteRenderer.Begin();
 
             // Bind the shader
             _shader.Use();
@@ -126,6 +132,17 @@ namespace Kee5Engine
                 0f,                                 // Rotation
                 new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
                 );
+
+            Random rng = new Random();
+
+            for (int i = 0; i < 666; i++)
+            {
+                spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(rng.Next(1920), rng.Next(1080)), new Vector2(rng.Next(250)), (float)rng.NextDouble(), Vector4.One);
+            }
+
+            spriteRenderer.End();
+
+            Title = $"Game | FPS: {Math.Round(1 / args.Time)} | Draw Calls: {drawCalls} | Sprites Drawn: {spritesDrawn}";
 
             // Swap the buffers to render on screen
             SwapBuffers();
