@@ -3,12 +3,12 @@
 out vec4 outputColor;
 
 in vec2 texCoord;
+in vec4 vColor;
 
 // sampler2d is a representation fo a texture in a shader
 uniform sampler2D texture0;
-uniform vec4 spriteColor;
 
 void main()
 {
-	outputColor = spriteColor * texture(texture0, texCoord);
+	outputColor = vColor * texture(texture0, texCoord);
 }

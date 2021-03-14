@@ -32,6 +32,8 @@ namespace Kee5Engine
             1, 2, 3  // Triangle 2
         };
 
+        public static double timeElapsed = 0;
+
         private int _vertexBufferObject;
 
         private int _vertexArrayObject;
@@ -57,8 +59,11 @@ namespace Kee5Engine
         public static InputHandler inputHandler;
         public static float screenScaleX, screenScaleY;
 
+        public static int drawCalls = 0, spritesDrawn = 0;
+
         public static Vector2 WindowSize { get; private set; }
 
+        private static List<Sprite> _testSprites;
 
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
@@ -98,7 +103,16 @@ namespace Kee5Engine
             camera = new Camera(new Vector3(0, 0, 10f), Size.X / (float)Size.Y, 100f, 0.2f);
 
             // Remove mouse from screen :)
-            CursorGrabbed = true;
+            CursorGrabbed = false;
+
+            _testSprites = new List<Sprite>();
+
+            Random rng = new Random();
+
+            for (int i = 0; i < 70000; i++)
+            {
+                _testSprites.Add(new Sprite(textures.GetTexture("Test"), rng.Next(250), rng.Next(250), rng.Next(1920), rng.Next(1080), (float)rng.NextDouble(), Vector4.One));
+            }
 
             base.OnLoad();
         }
@@ -106,9 +120,13 @@ namespace Kee5Engine
         // Create Render loop
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            Title = $"Game | FPS: {Math.Round(1 / args.Time)}";
+            drawCalls = 0;
+            spritesDrawn = 0;
+            
             // Clear the image
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            spriteRenderer.Begin();
 
             // Bind the shader
             _shader.Use();
@@ -125,6 +143,15 @@ namespace Kee5Engine
                 new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
                 );
 
+            foreach (Sprite sprite in _testSprites)
+            {
+                spriteRenderer.DrawSprite(sprite.texture, new Vector2(sprite.posX, sprite.posY), new Vector2(sprite.width, sprite.height), sprite.rotation, sprite.color);
+            }
+
+            spriteRenderer.End();
+
+            Title = $"Game | FPS: {Math.Round(1 / args.Time)} | Draw Calls: {drawCalls} | Sprites Drawn: {spritesDrawn}";
+
             // Swap the buffers to render on screen
             SwapBuffers();
 
@@ -133,6 +160,8 @@ namespace Kee5Engine
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
+            timeElapsed += args.Time;
+
             if (!IsFocused)
             {
                 return;
