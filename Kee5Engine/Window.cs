@@ -105,14 +105,14 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
-            _testSprites = new List<Sprite>();
+            //_testSprites = new List<Sprite>();
 
-            Random rng = new Random();
+            //Random rng = new Random();
 
-            for (int i = 0; i < 70000; i++)
-            {
-                _testSprites.Add(new Sprite(textures.GetTexture("Test"), rng.Next(250), rng.Next(250), rng.Next(1920), rng.Next(1080), (float)rng.NextDouble(), Vector4.One));
-            }
+            //for (int i = 0; i < 70000; i++)
+            //{
+            //    _testSprites.Add(new Sprite(textures.GetTexture("Test"), rng.Next(250), rng.Next(250), rng.Next(1920), rng.Next(1080), (float)rng.NextDouble(), Vector4.One));
+            //}
 
             base.OnLoad();
         }
@@ -143,10 +143,10 @@ namespace Kee5Engine
                 new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
                 );
 
-            foreach (Sprite sprite in _testSprites)
-            {
-                spriteRenderer.DrawSprite(sprite.texture, new Vector2(sprite.posX, sprite.posY), new Vector2(sprite.width, sprite.height), sprite.rotation, sprite.color);
-            }
+            //foreach (Sprite sprite in _testSprites)
+            //{
+            //    spriteRenderer.DrawSprite(sprite.texture, new Vector2(sprite.posX, sprite.posY), new Vector2(sprite.width, sprite.height), sprite.rotation, sprite.color);
+            //}
 
             spriteRenderer.End();
 
