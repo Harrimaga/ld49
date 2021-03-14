@@ -36,7 +36,7 @@ namespace Kee5Engine
         {
             int SpriteCount = drawList.Count;
 
-            float[] vertices = new float[SpriteCount * 54];
+            float[] vertices = new float[SpriteCount * 36];
 
             Random rng = new Random();
 

@@ -63,6 +63,7 @@ namespace Kee5Engine
 
         public static Vector2 WindowSize { get; private set; }
 
+        private static List<Sprite> _testSprites;
 
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
@@ -104,6 +105,15 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
+            _testSprites = new List<Sprite>();
+
+            Random rng = new Random();
+
+            for (int i = 0; i < 70000; i++)
+            {
+                _testSprites.Add(new Sprite(textures.GetTexture("Test"), rng.Next(250), rng.Next(250), rng.Next(1920), rng.Next(1080), (float)rng.NextDouble(), Vector4.One));
+            }
+
             base.OnLoad();
         }
 
@@ -133,11 +143,9 @@ namespace Kee5Engine
                 new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
                 );
 
-            Random rng = new Random();
-
-            for (int i = 0; i < 666; i++)
+            foreach (Sprite sprite in _testSprites)
             {
-                spriteRenderer.DrawSprite(textures.GetTexture("Test"), new Vector2(rng.Next(1920), rng.Next(1080)), new Vector2(rng.Next(250)), (float)rng.NextDouble(), Vector4.One);
+                spriteRenderer.DrawSprite(sprite.texture, new Vector2(sprite.posX, sprite.posY), new Vector2(sprite.width, sprite.height), sprite.rotation, sprite.color);
             }
 
             spriteRenderer.End();
