@@ -65,6 +65,8 @@ namespace Kee5Engine
 
         private static List<Sprite> _testSprites;
 
+        private TextRenderer2D _textRenderer;
+
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
             new NativeWindowSettings { Size = new Vector2i(width, height), Title = title })
@@ -89,6 +91,11 @@ namespace Kee5Engine
             GL.ClearColor(0.05f, 0.05f, 0.05f, 1f);
 
             GL.Enable(EnableCap.DepthTest);
+
+            _textRenderer = new TextRenderer2D();
+            _textRenderer.SetFont("Fonts/arial.ttf");
+            System.Drawing.Bitmap Text = _textRenderer.RenderString("Hello?", System.Drawing.Color.White);
+            textures.LoadTexture(Text, "text");
 
             // Create the shaders
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
@@ -135,12 +142,20 @@ namespace Kee5Engine
 
             // Draw a Sprite:
             // Window.spriteRenderer is static, so draws can be made anywhere
+            //spriteRenderer.DrawSprite(
+            //    textures.GetTexture("Test"),        // Texture
+            //    new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
+            //    new Vector2(1920f, 1080f),          // Size
+            //    0f,                                 // Rotation
+            //    new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
+            //    );
+
             spriteRenderer.DrawSprite(
-                textures.GetTexture("Test"),        // Texture
-                new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
-                new Vector2(1920f, 1080f),          // Size
-                0f,                                 // Rotation
-                new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
+                textures.GetTexture("text"),
+                new Vector2(960, 540),
+                new Vector2(80, 80),
+                0f,
+                new Vector4(0, 0, 0, 0)
                 );
 
             //foreach (Sprite sprite in _testSprites)

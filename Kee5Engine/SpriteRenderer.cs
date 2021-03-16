@@ -130,7 +130,7 @@ namespace Kee5Engine
             _vertices = GetVertices(_drawList);
 
             GL.ActiveTexture(TextureUnit.Texture0);
-            Window.textures.GetTexture("Test").Use(TextureUnit.Texture0);
+            Window.textures.GetTexture("text").Use(TextureUnit.Texture0);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
             GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)0, _vertices.Length * sizeof(float), _vertices);
