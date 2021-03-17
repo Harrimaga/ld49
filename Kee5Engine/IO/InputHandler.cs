@@ -9,10 +9,12 @@ namespace Kee5Engine.IO
     public class InputHandler
     {
         private KeyboardState state;
+        private MouseState mState;
 
-        public void Update(KeyboardState kstate)
+        public void Update(KeyboardState kstate, MouseState mstate)
         {
             state = kstate;
+            mState = mstate;
         }
 
         public bool IsKeyDown(Keys key)

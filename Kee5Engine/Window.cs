@@ -161,18 +161,6 @@ namespace Kee5Engine
                 new Vector4(1, 0, 0, 1)
                 );
 
-            for (int i = 0; i < 50; i++)
-            {
-                spriteRenderer.DrawSprite(
-                    i == 0 ? textures.GetTexture("Test") : textures.GetTexture("Test" + i),
-                    new Vector2(i * 10, i * 10),
-                    new Vector2(10, 10),
-                    4f,
-                    0f,
-                    Vector4.One
-                    );
-            }
-
             //foreach (Sprite sprite in _testSprites)
             //{
             //    spriteRenderer.DrawSprite(sprite.texture, new Vector2(sprite.posX, sprite.posY), new Vector2(sprite.width, sprite.height), sprite.rotation, sprite.color);
@@ -198,7 +186,7 @@ namespace Kee5Engine
             }
 
             // Update the InputHandler
-            inputHandler.Update(KeyboardState);
+            inputHandler.Update(KeyboardState, MouseState);
 
             camera.Update(args.Time);
 
