@@ -111,6 +111,8 @@ namespace Kee5Engine
             // Generate mipmaps
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
             return new Texture(handle, size, name);
         }
 

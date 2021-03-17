@@ -201,9 +201,9 @@ namespace Kee5Engine
             _drawList = new SortedList<int, Sprite>();
             _texList = new List<Texture>();
 
-            int[] samplers = new int[_texList.Count];
+            int[] samplers = new int[_maxTextureCount];
 
-            for (int i = 0; i < samplers.Length; i++)
+            for (int i = 0; i < _maxTextureCount; i++)
             {
                 samplers[i] = i;
             }

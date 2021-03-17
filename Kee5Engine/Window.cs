@@ -93,7 +93,7 @@ namespace Kee5Engine
             GL.Enable(EnableCap.DepthTest);
 
             _textRenderer = new TextRenderer2D();
-            _textRenderer.SetFont("Fonts/ariali.ttf");
+            _textRenderer.SetFont("Fonts/arial.ttf");
             _textRenderer.SetSize(128);
             System.Drawing.Bitmap Text = _textRenderer.RenderString("Hello?", System.Drawing.Color.White, System.Drawing.Color.Transparent);
             textures.LoadTexture(Text, "text");
@@ -145,7 +145,7 @@ namespace Kee5Engine
             // Window.spriteRenderer is static, so draws can be made anywhere
             spriteRenderer.DrawSprite(
                 textures.GetTexture("Test"),        // Texture
-                new Vector2(1920, 1080),            // Position (center-origin)
+                new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
                 new Vector2(1920f, 1080f),          // Size
                 1f,                                 // Layer
                 0f,                                 // Rotation

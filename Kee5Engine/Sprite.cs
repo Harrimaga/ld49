@@ -9,7 +9,7 @@ namespace Kee5Engine
     public class Sprite
     {
         public Texture texture;
-        public float width, height, posX, posY, posZ, rotation, textureID;
+        public float width, height, posX, posY, posZ, rotation;
         public Vector4 color;
         public string name;
 
