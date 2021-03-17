@@ -4,11 +4,13 @@ out vec4 outputColor;
 
 in vec2 texCoord;
 in vec4 vColor;
+flat in float vTexID;
 
 // sampler2d is a representation fo a texture in a shader
-uniform sampler2D texture0;
+uniform sampler2D uTextures[32];
 
 void main()
 {
-	outputColor = vColor * texture(texture0, texCoord);
+	int index = int(vTexID);
+	outputColor = vColor * texture(uTextures[index], texCoord);
 }

@@ -149,5 +149,11 @@ namespace Kee5Engine.Shaders
             GL.UseProgram(Handle);
             GL.Uniform4(_uniformLocations[name], data);
         }
+
+        public void SetIntArray(string name, int[] data)
+        {
+            GL.UseProgram(Handle);
+            GL.Uniform1(_uniformLocations[name + "[0]"], data.Length, data);
+        }
     }
 }

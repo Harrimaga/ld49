@@ -36,63 +36,71 @@ namespace Kee5Engine
         {
             int SpriteCount = drawList.Count;
 
-            float[] vertices = new float[SpriteCount * 36];
+            float[] vertices = new float[SpriteCount * 40];
 
             Random rng = new Random();
 
             for (int i = 0; i < SpriteCount; i++)
             {
                 Sprite s = drawList[i];
-                vertices[i * 36 + 0] = s.posX + s.width / 2;
-                vertices[i * 36 + 1] = s.posY + s.height / 2;
-                vertices[i * 36 + 2] = 1f;
+                vertices[i * 40 + 0] = s.posX + s.width / 2;
+                vertices[i * 40 + 1] = s.posY + s.height / 2;
+                vertices[i * 40 + 2] = s.posZ;
+                           
+                vertices[i * 40 + 3] = 1.0f;
+                vertices[i * 40 + 4] = 1.0f;
                              
-                vertices[i * 36 + 3] = 1.0f;
-                vertices[i * 36 + 4] = 1.0f;
-                             
-                vertices[i * 36 + 5] = 1.0f;
-                vertices[i * 36 + 6] = 1.0f;
-                vertices[i * 36 + 7] = 1.0f;
-                vertices[i * 36 + 8] = 1.0f;
-                             
-                             
-                vertices[i * 36 + 9]  = s.posX + s.width / 2;
-                vertices[i * 36 + 10] = s.posY - s.height / 2;
-                vertices[i * 36 + 11] = 1.0f;
-                             
-                vertices[i * 36 + 12] = 1.0f;
-                vertices[i * 36 + 13] = 0.0f;
-                             
-                vertices[i * 36 + 14] = 1.0f;
-                vertices[i * 36 + 15] = 1.0f;
-                vertices[i * 36 + 16] = 1.0f;
-                vertices[i * 36 + 17] = 1.0f;
+                vertices[i * 40 + 5] = s.color[0];
+                vertices[i * 40 + 6] = s.color[1];
+                vertices[i * 40 + 7] = s.color[2];
+                vertices[i * 40 + 8] = s.color[3];
+
+                vertices[i * 40 + 9] = s.texID;
                              
                              
-                vertices[i * 36 + 18] = s.posX - s.width / 2;
-                vertices[i * 36 + 19] = s.posY - s.height / 2;
-                vertices[i * 36 + 20] = 1.0f;
+                vertices[i * 40 + 10]  = s.posX + s.width / 2;
+                vertices[i * 40 + 11] = s.posY - s.height / 2;
+                vertices[i * 40 + 12] = s.posZ;
+                            
+                vertices[i * 40 + 13] = 1.0f;
+                vertices[i * 40 + 14] = 0.0f;
+                            
+                vertices[i * 40 + 15] = s.color[0];
+                vertices[i * 40 + 16] = s.color[1];
+                vertices[i * 40 + 17] = s.color[2];
+                vertices[i * 40 + 18] = s.color[3];
+
+                vertices[i * 40 + 19] = s.texID;
+
+
+                vertices[i * 40 + 20] = s.posX - s.width / 2;
+                vertices[i * 40 + 21] = s.posY - s.height / 2;
+                vertices[i * 40 + 22] = s.posZ;
                              
-                vertices[i * 36 + 21] = 0.0f;
-                vertices[i * 36 + 22] = 0.0f;
+                vertices[i * 40 + 23] = 0.0f;
+                vertices[i * 40 + 24] = 0.0f;
                              
-                vertices[i * 36 + 23] = 1.0f;
-                vertices[i * 36 + 24] = 1.0f;
-                vertices[i * 36 + 25] = 1.0f;
-                vertices[i * 36 + 26] = 1.0f;
+                vertices[i * 40 + 25] = s.color[0];
+                vertices[i * 40 + 26] = s.color[1];
+                vertices[i * 40 + 27] = s.color[2];
+                vertices[i * 40 + 28] = s.color[3];
+
+                vertices[i * 40 + 29] = s.texID;
+
+
+                vertices[i * 40 + 30] = s.posX - s.width / 2;
+                vertices[i * 40 + 31] = s.posY + s.height / 2;
+                vertices[i * 40 + 32] = s.posZ;
                              
+                vertices[i * 40 + 33] = 0.0f;
+                vertices[i * 40 + 34] = 1.0f;
                              
-                vertices[i * 36 + 27] = s.posX - s.width / 2;
-                vertices[i * 36 + 28] = s.posY + s.height / 2;
-                vertices[i * 36 + 29] = 1.0f;
-                             
-                vertices[i * 36 + 30] = 0.0f;
-                vertices[i * 36 + 31] = 1.0f;
-                             
-                vertices[i * 36 + 32] = 1.0f;
-                vertices[i * 36 + 33] = 1.0f;
-                vertices[i * 36 + 34] = 1.0f;
-                vertices[i * 36 + 35] = 1.0f;
+                vertices[i * 40 + 35] = s.color[0];
+                vertices[i * 40 + 36] = s.color[1];
+                vertices[i * 40 + 37] = s.color[2];
+                vertices[i * 40 + 38] = s.color[3];
+
+                vertices[i * 40 + 39] = s.texID;
             }
             return vertices;
         }
@@ -101,7 +109,9 @@ namespace Kee5Engine
 
         private int _vertexArrayObject, _vertexBufferObject, _elementBufferObject;
 
-        private int _maxQuadCount, _maxVertexCount, _maxIndicesCount;
+        private int _maxQuadCount, _maxVertexCount, _maxIndicesCount, _maxTextureCount;
+
+        private List<Texture> _texList;
 
         private List<Sprite> _drawList;
 
@@ -115,12 +125,14 @@ namespace Kee5Engine
         public void Begin()
         {
             _drawList.Clear();
+            _texList.Clear();
         }
 
         public void End()
         {
             Flush();
             _drawList.Clear();
+            _texList.Clear();
         }
 
         public void Flush()
@@ -129,8 +141,17 @@ namespace Kee5Engine
 
             _vertices = GetVertices(_drawList);
 
-            GL.ActiveTexture(TextureUnit.Texture0);
-            Window.textures.GetTexture("Test").Use(TextureUnit.Texture0);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            int[] handles = new int[_texList.Count];
+
+            for (int i = 0; i < _texList.Count; i++)
+            {
+                handles[i] = _texList[i].Handle;
+            }
+
+            GL.BindTextures(0, _texList.Count, handles);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
             GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)0, _vertices.Length * sizeof(float), _vertices);
@@ -142,7 +163,7 @@ namespace Kee5Engine
             GL.BindVertexArray(0);
         }
 
-        public void DrawSprite(Texture texture, Vector2 position, Vector2 size, float rotation, Vector4 color)
+        public void DrawSprite(Texture texture, Vector2 position, Vector2 size, float layer, float rotation, Vector4 color)
         {
             if (position.X - Window.camera.Position.X > Window.WindowSize.X + 100 + size.X / 2
                 || position.Y - Window.camera.Position.Y > Window.WindowSize.Y + 100 + size.Y / 2
@@ -153,10 +174,15 @@ namespace Kee5Engine
             }
 
             Window.spritesDrawn += 1;
+            
+            if (!_texList.Contains(texture))
+            {
+                _texList.Add(texture);
+            }
 
-            _drawList.Add(new Sprite(texture, size.X, size.Y, position.X, position.Y, rotation, color));
+            _drawList.Add(new Sprite(texture, size.X, size.Y, position.X, position.Y, layer, rotation, color, (float)_texList.Count - 1));
 
-            if (_drawList.Count > _maxQuadCount)
+            if (_drawList.Count > _maxQuadCount || _texList.Count > _maxTextureCount - 1)
             {
                 Flush();
                 Begin();
@@ -170,7 +196,19 @@ namespace Kee5Engine
             _maxVertexCount = _maxQuadCount * 4;
             _maxIndicesCount = _maxQuadCount * 6;
 
+            _maxTextureCount = GL.GetInteger(GetPName.MaxTextureImageUnits);
+
             _drawList = new List<Sprite>();
+            _texList = new List<Texture>();
+
+            int[] samplers = new int[_maxTextureCount];
+
+            for (int i = 0; i < _maxTextureCount; i++)
+            {
+                samplers[i] = i;
+            }
+
+            _shader.SetIntArray("uTextures", samplers);
 
             _indices = GetIndices();
 
@@ -178,21 +216,25 @@ namespace Kee5Engine
             _vertexBufferObject = GL.GenBuffer();
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, _maxVertexCount * 9 * sizeof(float), IntPtr.Zero, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, _maxVertexCount * 10 * sizeof(float), IntPtr.Zero, BufferUsageHint.StaticDraw);
 
             GL.BindVertexArray(_vertexArrayObject);
 
             var vertexLocation = _shader.GetAttribLocation("aPosition");
             GL.EnableVertexAttribArray(vertexLocation);
-            GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 9 * sizeof(float), 0);
+            GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 10 * sizeof(float), 0);
 
             var texCoordLocation = _shader.GetAttribLocation("aTexCoord");
             GL.EnableVertexAttribArray(texCoordLocation);
-            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 9 * sizeof(float), 3 * sizeof(float));
+            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 10 * sizeof(float), 3 * sizeof(float));
 
             var colorLocation = _shader.GetAttribLocation("aColor");
             GL.EnableVertexAttribArray(colorLocation);
-            GL.VertexAttribPointer(colorLocation, 4, VertexAttribPointerType.Float, false, 9 * sizeof(float), 5 * sizeof(float));
+            GL.VertexAttribPointer(colorLocation, 4, VertexAttribPointerType.Float, false, 10 * sizeof(float), 5 * sizeof(float));
+
+            var texIDLocation = _shader.GetAttribLocation("aTexID");
+            GL.EnableVertexAttribArray(texIDLocation);
+            GL.VertexAttribPointer(texIDLocation, 1, VertexAttribPointerType.Float, false, 10 * sizeof(float), 9 * sizeof(float));
 
             _elementBufferObject = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);

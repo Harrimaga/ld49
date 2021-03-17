@@ -65,6 +65,8 @@ namespace Kee5Engine
 
         private static List<Sprite> _testSprites;
 
+        private TextRenderer2D _textRenderer;
+
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
             new NativeWindowSettings { Size = new Vector2i(width, height), Title = title })
@@ -89,6 +91,12 @@ namespace Kee5Engine
             GL.ClearColor(0.05f, 0.05f, 0.05f, 1f);
 
             GL.Enable(EnableCap.DepthTest);
+
+            _textRenderer = new TextRenderer2D();
+            _textRenderer.SetFont("Fonts/arial.ttf");
+            _textRenderer.SetSize(128);
+            System.Drawing.Bitmap Text = _textRenderer.RenderString("Hello?", System.Drawing.Color.White, System.Drawing.Color.Transparent);
+            textures.LoadTexture(Text, "text");
 
             // Create the shaders
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
@@ -139,8 +147,18 @@ namespace Kee5Engine
                 textures.GetTexture("Test"),        // Texture
                 new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
                 new Vector2(1920f, 1080f),          // Size
+                1f,                                 // Layer
                 0f,                                 // Rotation
                 new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
+                );
+
+            spriteRenderer.DrawSprite(
+                textures.GetTexture("text"),
+                new Vector2(960, 540),
+                textures.GetTexture("text").Size,
+                2f,
+                0f,
+                new Vector4(1, 0, 0, 1)
                 );
 
             //foreach (Sprite sprite in _testSprites)
@@ -168,7 +186,7 @@ namespace Kee5Engine
             }
 
             // Update the InputHandler
-            inputHandler.Update(KeyboardState);
+            inputHandler.Update(KeyboardState, MouseState);
 
             camera.Update(args.Time);
 
