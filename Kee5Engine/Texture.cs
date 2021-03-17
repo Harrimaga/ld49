@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Text;
 
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 
 namespace Kee5Engine
@@ -12,11 +13,13 @@ namespace Kee5Engine
     public class Texture
     {
         public readonly int Handle;
+        public readonly Vector2 Size;
 
         public static Texture LoadFromFile(string path)
         {
             // Generate Handle
             int handle = GL.GenTexture();
+            Vector2 size;
 
             // Bind the handle
             GL.ActiveTexture(TextureUnit.Texture0);
@@ -44,6 +47,7 @@ namespace Kee5Engine
                     PixelType.UnsignedByte,     // Data type of the pixels
                     data.Scan0                  // The actual pixels
                     );
+                size = new Vector2(image.Size.Width, image.Size.Height);
             }
 
             // Set min and mag filter. These are used for scaling down and up, respectively
@@ -59,13 +63,14 @@ namespace Kee5Engine
             // Generate mipmaps
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-            return new Texture(handle);
+            return new Texture(handle, size);
         }
 
         public static Texture LoadFromBmp(Bitmap bmp)
         {
             // Generate Handle
             int handle = GL.GenTexture();
+            Vector2 size;
 
             // Bind the handle
             GL.ActiveTexture(TextureUnit.Texture0);
@@ -93,6 +98,7 @@ namespace Kee5Engine
                     PixelType.UnsignedByte,     // Data type of the pixels
                     data.Scan0                  // The actual pixels
                     );
+                size = new Vector2(image.Width, image.Height);
             }
 
             // Set min and mag filter. These are used for scaling down and up, respectively
@@ -108,12 +114,13 @@ namespace Kee5Engine
             // Generate mipmaps
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-            return new Texture(handle);
+            return new Texture(handle, size);
         }
 
-        public Texture(int glhandle)
+        public Texture(int glhandle, Vector2 size)
         {
             Handle = glhandle;
+            Size = size;
         }
 
         // Activate texture

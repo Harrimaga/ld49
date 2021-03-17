@@ -129,6 +129,9 @@ namespace Kee5Engine
 
             _vertices = GetVertices(_drawList);
 
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
             GL.ActiveTexture(TextureUnit.Texture0);
             Window.textures.GetTexture("text").Use(TextureUnit.Texture0);
 

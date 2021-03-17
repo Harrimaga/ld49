@@ -93,8 +93,9 @@ namespace Kee5Engine
             GL.Enable(EnableCap.DepthTest);
 
             _textRenderer = new TextRenderer2D();
-            _textRenderer.SetFont("Fonts/arial.ttf");
-            System.Drawing.Bitmap Text = _textRenderer.RenderString("Hello?", System.Drawing.Color.White);
+            _textRenderer.SetFont("Fonts/ariali.ttf");
+            _textRenderer.SetSize(128);
+            System.Drawing.Bitmap Text = _textRenderer.RenderString("Hello?", System.Drawing.Color.White, System.Drawing.Color.Transparent);
             textures.LoadTexture(Text, "text");
 
             // Create the shaders
@@ -153,7 +154,7 @@ namespace Kee5Engine
             spriteRenderer.DrawSprite(
                 textures.GetTexture("text"),
                 new Vector2(960, 540),
-                new Vector2(80, 80),
+                textures.GetTexture("text").Size,
                 0f,
                 new Vector4(0, 0, 0, 0)
                 );
