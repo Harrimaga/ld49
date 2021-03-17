@@ -23,13 +23,13 @@ namespace Kee5Engine
 
         public void LoadTexture(string path, string name)
         {
-            Texture texture = Texture.LoadFromFile(path);
+            Texture texture = Texture.LoadFromFile(path, name);
             _textures[name] = texture;
         }
 
         public void LoadTexture(Bitmap image, string name)
         {
-            Texture texture = Texture.LoadFromBmp(image);
+            Texture texture = Texture.LoadFromBmp(image, name);
             _textures[name] = texture;
         }
 

@@ -143,20 +143,22 @@ namespace Kee5Engine
 
             // Draw a Sprite:
             // Window.spriteRenderer is static, so draws can be made anywhere
-            //spriteRenderer.DrawSprite(
-            //    textures.GetTexture("Test"),        // Texture
-            //    new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
-            //    new Vector2(1920f, 1080f),          // Size
-            //    0f,                                 // Rotation
-            //    new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
-            //    );
+            spriteRenderer.DrawSprite(
+                textures.GetTexture("Test"),        // Texture
+                new Vector2(1920, 1080),            // Position (center-origin)
+                new Vector2(1920f, 1080f),          // Size
+                1f,                                 // Layer
+                0f,                                 // Rotation
+                new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
+                );
 
             spriteRenderer.DrawSprite(
                 textures.GetTexture("text"),
                 new Vector2(960, 540),
                 textures.GetTexture("text").Size,
+                2f,
                 0f,
-                new Vector4(0, 0, 0, 0)
+                new Vector4(1, 0, 0, 1)
                 );
 
             //foreach (Sprite sprite in _testSprites)

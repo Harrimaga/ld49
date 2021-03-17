@@ -14,67 +14,64 @@ namespace Kee5Engine
     {
         public readonly int Handle;
         public readonly Vector2 Size;
+        public readonly string name;
 
-        public static Texture LoadFromFile(string path)
+        public static Texture LoadFromFile(string path, string name)
         {
             // Generate Handle
-            int handle = GL.GenTexture();
-            Vector2 size;
-
-            // Bind the handle
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, handle);
+            //int handle = GL.GenTexture();
+            //Vector2 size;
 
             // Load the image
-            using (var image = new Bitmap(path))
-            {
-                // Get the pixels from the loaded bitmap
-                var data = image.LockBits(
-                    new Rectangle(0, 0, image.Width, image.Height),         // The pixel area
-                    ImageLockMode.ReadOnly,                                 // Locking mode. Need ReadOnly as we're only passing them to OpenGL
-                    System.Drawing.Imaging.PixelFormat.Format32bppArgb      // Pixelformat for the pixels
-                    );
+            //using (var image = new Bitmap(path))
+            //{
+            //    // Get the pixels from the loaded bitmap
+            //    var data = image.LockBits(
+            //        new Rectangle(0, 0, image.Width, image.Height),         // The pixel area
+            //        ImageLockMode.ReadOnly,                                 // Locking mode. Need ReadOnly as we're only passing them to OpenGL
+            //        System.Drawing.Imaging.PixelFormat.Format32bppArgb      // Pixelformat for the pixels
+            //        );
 
-                // Generate a texture
-                GL.TexImage2D(
-                    TextureTarget.Texture2D,    // Type of generated texture
-                    0,                          // Level of detail
-                    PixelInternalFormat.Rgba,   // Target format of the pixels
-                    image.Width,                // Width
-                    image.Height,               // Height
-                    0,                          // Border. Must always be 0, lazy Khronos never removed it
-                    PixelFormat.Bgra,           // Format of the pixels
-                    PixelType.UnsignedByte,     // Data type of the pixels
-                    data.Scan0                  // The actual pixels
-                    );
-                size = new Vector2(image.Size.Width, image.Size.Height);
-            }
+            //    // Generate a texture
+            //    GL.TexImage2D(
+            //        TextureTarget.Texture2D,    // Type of generated texture
+            //        0,                          // Level of detail
+            //        PixelInternalFormat.Rgba,   // Target format of the pixels
+            //        image.Width,                // Width
+            //        image.Height,               // Height
+            //        0,                          // Border. Must always be 0, lazy Khronos never removed it
+            //        PixelFormat.Bgra,           // Format of the pixels
+            //        PixelType.UnsignedByte,     // Data type of the pixels
+            //        data.Scan0                  // The actual pixels
+            //        );
+            //    size = new Vector2(image.Size.Width, image.Size.Height);
+            //}
 
-            // Set min and mag filter. These are used for scaling down and up, respectively
-            // Nearest is used, as it just grabs the nearest pixel, giving the pixellated feel
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            return LoadFromBmp(new Bitmap(path), name);
 
-            // Set wrapping mode, this is how the texture wraps
-            // S is for X axis, T is for Y axis
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            //// Set min and mag filter. These are used for scaling down and up, respectively
+            //// Nearest is used, as it just grabs the nearest pixel, giving the pixellated feel
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 
-            // Generate mipmaps
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+            //// Set wrapping mode, this is how the texture wraps
+            //// S is for X axis, T is for Y axis
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
 
-            return new Texture(handle, size);
+            //// Generate mipmaps
+            //GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+            //return new Texture(handle, size);
         }
 
-        public static Texture LoadFromBmp(Bitmap bmp)
+        public static Texture LoadFromBmp(Bitmap bmp, string name)
         {
             // Generate Handle
             int handle = GL.GenTexture();
-            Vector2 size;
 
-            // Bind the handle
-            GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, handle);
+            Vector2 size;
 
             // Load the image
             using (var image = bmp)
@@ -114,13 +111,14 @@ namespace Kee5Engine
             // Generate mipmaps
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-            return new Texture(handle, size);
+            return new Texture(handle, size, name);
         }
 
-        public Texture(int glhandle, Vector2 size)
+        public Texture(int glhandle, Vector2 size, string name)
         {
             Handle = glhandle;
             Size = size;
+            this.name = name;
         }
 
         // Activate texture
