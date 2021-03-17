@@ -32,7 +32,7 @@ namespace Kee5Engine
             4, 6, 7
         };
 
-        public float[] GetVertices(SortedList<int, Sprite> drawList)
+        public float[] GetVertices(List<Sprite> drawList)
         {
             int SpriteCount = drawList.Count;
 
@@ -42,7 +42,7 @@ namespace Kee5Engine
 
             for (int i = 0; i < SpriteCount; i++)
             {
-                Sprite s = drawList.Values[i];
+                Sprite s = drawList[i];
                 vertices[i * 40 + 0] = s.posX + s.width / 2;
                 vertices[i * 40 + 1] = s.posY + s.height / 2;
                 vertices[i * 40 + 2] = s.posZ;
@@ -55,7 +55,7 @@ namespace Kee5Engine
                 vertices[i * 40 + 7] = s.color[2];
                 vertices[i * 40 + 8] = s.color[3];
 
-                vertices[i * 40 + 9] = drawList.Keys[i];
+                vertices[i * 40 + 9] = s.texID;
                              
                              
                 vertices[i * 40 + 10]  = s.posX + s.width / 2;
@@ -70,7 +70,7 @@ namespace Kee5Engine
                 vertices[i * 40 + 17] = s.color[2];
                 vertices[i * 40 + 18] = s.color[3];
 
-                vertices[i * 40 + 19] = drawList.Keys[i];
+                vertices[i * 40 + 19] = s.texID;
 
 
                 vertices[i * 40 + 20] = s.posX - s.width / 2;
@@ -85,7 +85,7 @@ namespace Kee5Engine
                 vertices[i * 40 + 27] = s.color[2];
                 vertices[i * 40 + 28] = s.color[3];
 
-                vertices[i * 40 + 29] = drawList.Keys[i];
+                vertices[i * 40 + 29] = s.texID;
 
 
                 vertices[i * 40 + 30] = s.posX - s.width / 2;
@@ -100,7 +100,7 @@ namespace Kee5Engine
                 vertices[i * 40 + 37] = s.color[2];
                 vertices[i * 40 + 38] = s.color[3];
 
-                vertices[i * 40 + 39] = drawList.Keys[i];
+                vertices[i * 40 + 39] = s.texID;
             }
             return vertices;
         }
@@ -113,7 +113,7 @@ namespace Kee5Engine
 
         private List<Texture> _texList;
 
-        private SortedList<int, Sprite> _drawList;
+        private List<Sprite> _drawList;
 
 
         public SpriteRenderer(Shader shader)
@@ -180,7 +180,7 @@ namespace Kee5Engine
                 _texList.Add(texture);
             }
 
-            _drawList.Add(_texList.Count - 1, new Sprite(texture, size.X, size.Y, position.X, position.Y, layer, rotation, color));
+            _drawList.Add(new Sprite(texture, size.X, size.Y, position.X, position.Y, layer, rotation, color, (float)_texList.Count - 1));
 
             if (_drawList.Count > _maxQuadCount || _texList.Count > _maxTextureCount - 1)
             {
@@ -198,7 +198,7 @@ namespace Kee5Engine
 
             _maxTextureCount = GL.GetInteger(GetPName.MaxTextureImageUnits);
 
-            _drawList = new SortedList<int, Sprite>();
+            _drawList = new List<Sprite>();
             _texList = new List<Texture>();
 
             int[] samplers = new int[_maxTextureCount];

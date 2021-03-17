@@ -9,11 +9,11 @@ namespace Kee5Engine
     public class Sprite
     {
         public Texture texture;
-        public float width, height, posX, posY, posZ, rotation;
+        public float width, height, posX, posY, posZ, rotation, texID;
         public Vector4 color;
         public string name;
 
-        public Sprite(Texture texture, float width, float height, float posX, float posY, float posZ, float rotation, Vector4 color)
+        public Sprite(Texture texture, float width, float height, float posX, float posY, float posZ, float rotation, Vector4 color, float texID)
         {
             this.texture = texture;
             this.width = width;
@@ -23,6 +23,7 @@ namespace Kee5Engine
             this.posZ = posZ;
             this.rotation = rotation;
             this.color = color;
+            this.texID = texID;
         }
 
         public void Draw()
