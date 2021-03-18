@@ -163,6 +163,11 @@ namespace Kee5Engine
             GL.BindVertexArray(0);
         }
 
+        public void DrawSprite(Sprite sprite)
+        {
+            DrawSprite(sprite.texture, new Vector2(sprite.posX, sprite.posY), new Vector2(sprite.width, sprite.height), sprite.posZ, sprite.rotation, sprite.color);
+        }
+
         public void DrawSprite(Texture texture, Vector2 position, Vector2 size, float layer, float rotation, Vector4 color)
         {
             if (position.X - Window.camera.Position.X > Window.WindowSize.X + 100 + size.X / 2

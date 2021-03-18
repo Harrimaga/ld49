@@ -19,6 +19,7 @@ namespace Kee5Engine
         public void init()
         {
             LoadTexture("Sprites/Test/Test.png", "Test");
+            LoadTexture("Sprites/Test/Pixel.png", "Pixel");
         }
 
         public void LoadTexture(string path, string name)

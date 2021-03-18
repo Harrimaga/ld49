@@ -63,9 +63,9 @@ namespace Kee5Engine
 
         public static Vector2 WindowSize { get; private set; }
 
-        private static List<Sprite> _testSprites;
+        public static TextRenderer2D textRenderer;
 
-        private TextRenderer2D _textRenderer;
+        private Button _button;
 
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
@@ -92,11 +92,16 @@ namespace Kee5Engine
 
             GL.Enable(EnableCap.DepthTest);
 
-            _textRenderer = new TextRenderer2D();
-            _textRenderer.SetFont("Fonts/arial.ttf");
-            _textRenderer.SetSize(128);
-            System.Drawing.Bitmap Text = _textRenderer.RenderString("Hello?", System.Drawing.Color.White, System.Drawing.Color.Transparent);
+            textRenderer = new TextRenderer2D();
+            textRenderer.SetFont("Fonts/arial.ttf");
+            textRenderer.SetSize(128);
+            System.Drawing.Bitmap Text = textRenderer.RenderString("Hello", System.Drawing.Color.White, System.Drawing.Color.Transparent);
             textures.LoadTexture(Text, "text");
+
+            textRenderer.SetFont("Fonts/ariali.ttf");
+            textRenderer.SetSize(64);
+            System.Drawing.Bitmap text2 = textRenderer.RenderString("This is some text", System.Drawing.Color.Black, System.Drawing.Color.Transparent);
+            textures.LoadTexture(text2, "text2");
 
             // Create the shaders
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
@@ -113,14 +118,7 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
-            //_testSprites = new List<Sprite>();
-
-            //Random rng = new Random();
-
-            //for (int i = 0; i < 70000; i++)
-            //{
-            //    _testSprites.Add(new Sprite(textures.GetTexture("Test"), rng.Next(250), rng.Next(250), rng.Next(1920), rng.Next(1080), (float)rng.NextDouble(), Vector4.One));
-            //}
+            _button = new Button(960, 540, 400, 200, 2, "Pixel", "Button", new Vector4(0.2f, 0, 0, 1), new Vector3(1, 1, 1), () => { Console.WriteLine("Clicked!"); });
 
             base.OnLoad();
         }
@@ -143,28 +141,34 @@ namespace Kee5Engine
 
             // Draw a Sprite:
             // Window.spriteRenderer is static, so draws can be made anywhere
-            spriteRenderer.DrawSprite(
-                textures.GetTexture("Test"),        // Texture
-                new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
-                new Vector2(1920f, 1080f),          // Size
-                1f,                                 // Layer
-                0f,                                 // Rotation
-                new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
-                );
+            //spriteRenderer.DrawSprite(
+            //    textures.GetTexture("Test"),        // Texture
+            //    new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
+            //    new Vector2(1920f, 1080f),          // Size
+            //    1f,                                 // Layer
+            //    0f,                                 // Rotation
+            //    new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
+            //    );
 
-            spriteRenderer.DrawSprite(
-                textures.GetTexture("text"),
-                new Vector2(960, 540),
-                textures.GetTexture("text").Size,
-                2f,
-                0f,
-                new Vector4(1, 0, 0, 1)
-                );
+            //spriteRenderer.DrawSprite(
+            //    textures.GetTexture("text"),
+            //    new Vector2(960, 540),
+            //    textures.GetTexture("text").Size,
+            //    2f,
+            //    0f,
+            //    new Vector4(1, 0, 0, 1)
+            //    );
 
-            //foreach (Sprite sprite in _testSprites)
-            //{
-            //    spriteRenderer.DrawSprite(sprite.texture, new Vector2(sprite.posX, sprite.posY), new Vector2(sprite.width, sprite.height), sprite.rotation, sprite.color);
-            //}
+            //spriteRenderer.DrawSprite(
+            //    textures.GetTexture("text2"),
+            //    new Vector2(960, 700),
+            //    textures.GetTexture("text2").Size,
+            //    2f,
+            //    0f,
+            //    new Vector4(1, 1, 1, 1)
+            //    );
+
+            _button.Draw();
 
             spriteRenderer.End();
 
@@ -198,6 +202,15 @@ namespace Kee5Engine
             }
 
             base.OnUpdateFrame(args);
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (_button.IsInButton(MousePosition.X, MousePosition.Y))
+            {
+                _button.OnClick();
+            }
+            base.OnMouseDown(e);
         }
 
         protected override void OnResize(ResizeEventArgs e)

@@ -13,7 +13,7 @@ namespace Kee5Engine
         public Vector4 color;
         public string name;
 
-        public Sprite(Texture texture, float width, float height, float posX, float posY, float posZ, float rotation, Vector4 color, float texID)
+        public Sprite(Texture texture, float width, float height, float posX, float posY, float posZ, float rotation, Vector4 color, float texID = 0)
         {
             this.texture = texture;
             this.width = width;
