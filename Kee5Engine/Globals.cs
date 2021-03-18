@@ -1,4 +1,5 @@
-﻿using OpenTK.Mathematics;
+﻿using Kee5Engine.Audio;
+using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +17,7 @@ namespace Kee5Engine
             {
                 button.Update();
             }
+            AudioManager.Update();
         }
 
         public static void Draw()
