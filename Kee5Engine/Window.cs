@@ -118,7 +118,7 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
-            _button = new Button(960, 540, 400, 200, 2, "Pixel", "Button", new Vector4(0.2f, 0, 0, 1), new Vector3(1, 1, 1), () => { Console.WriteLine("Clicked!"); });
+            _button = new Button(960, 540, 400, 200, 2, "Test", "Button", new Vector4(0.2f, 0, 0, 1), new Vector3(1, 1, 1), true, () => { Console.WriteLine("Clicked!"); });
 
             base.OnLoad();
         }
@@ -200,6 +200,8 @@ namespace Kee5Engine
                 // Close the window
                 Close();
             }
+
+            _button.Update();
 
             base.OnUpdateFrame(args);
         }
