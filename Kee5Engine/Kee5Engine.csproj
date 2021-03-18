@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.0.0" />
     <PackageReference Include="OpenTK" Version="4.5.0" />
     <PackageReference Include="SharpFont.Dependencies" Version="2.6.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
@@ -36,6 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Audio\Music\Track17.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Fonts\arial.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -87,6 +91,11 @@
     <None Update="Sprites\Test\Test.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Audio\Music\" />
+    <Folder Include="Audio\SFX\" />
   </ItemGroup>
 
 </Project>

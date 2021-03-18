@@ -11,6 +11,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 using Kee5Engine.IO;
 using Kee5Engine.Shaders;
+using Kee5Engine.Audio;
 
 namespace Kee5Engine
 {
@@ -85,6 +86,8 @@ namespace Kee5Engine
         // Initialize OpenGL
         protected override void OnLoad()
         {
+            AudioManager.PlayMusic("Audio/Music/Track17.wav");
+
             // Set the background colour after we clear it
             GL.ClearColor(0.05f, 0.05f, 0.05f, 1f);
 
