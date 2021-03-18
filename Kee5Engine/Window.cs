@@ -65,8 +65,6 @@ namespace Kee5Engine
 
         public static TextRenderer2D textRenderer;
 
-        private Button _button;
-
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
             new NativeWindowSettings { Size = new Vector2i(width, height), Title = title })
@@ -118,7 +116,8 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
-            _button = new Button(960, 540, 400, 200, 2, "Test", "Button", new Vector4(0.2f, 0, 0, 1), new Vector3(1, 1, 1), true, () => { Console.WriteLine("Clicked!"); });
+            Globals.activeButtons.Add(new Button(960, 540, 400, 200, 2, "Test", "Button", new Vector4(0.2f, 0, 0, 1), new Vector3(1, 1, 1), true, () => { Console.WriteLine("Clicked!"); }));
+
 
             base.OnLoad();
         }
@@ -168,7 +167,7 @@ namespace Kee5Engine
             //    new Vector4(1, 1, 1, 1)
             //    );
 
-            _button.Draw();
+            Globals.Draw();
 
             spriteRenderer.End();
 
@@ -201,16 +200,19 @@ namespace Kee5Engine
                 Close();
             }
 
-            _button.Update();
+            Globals.Update();
 
             base.OnUpdateFrame(args);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            if (_button.IsInButton(MousePosition.X, MousePosition.Y))
+            foreach (Button button in Globals.activeButtons)
             {
-                _button.OnClick();
+                if (button.IsInButton(MousePosition.X, MousePosition.Y))
+                {
+                    button.OnClick();
+                }
             }
             base.OnMouseDown(e);
         }
