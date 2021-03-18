@@ -116,7 +116,7 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
-            Globals.activeButtons.Add(new Button(960, 540, 400, 200, 2, "Test", "Button", new Vector4(0.2f, 0, 0, 1), new Vector3(1, 1, 1), true, () => { Console.WriteLine("Clicked!"); }));
+            Globals.activeButtons.Add(new Button(960, 540, 400, 200, 2, "Test", new Vector4(0.2f, 0, 0, 1), true, () => { Console.WriteLine("Clicked!"); }));
 
 
             base.OnLoad();

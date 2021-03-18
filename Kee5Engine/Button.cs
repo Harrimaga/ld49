@@ -81,7 +81,10 @@ namespace Kee5Engine
             _background = new Sprite(Window.textures.GetTexture(sprite), width, height, posX, posY, layer, 0f, _spriteColor);
             Window.textRenderer.SetSize(width / 4);
             Window.textRenderer.SetFont("Fonts/arial.ttf");
-            _textRender = Texture.LoadFromBmp(Window.textRenderer.RenderString(_text, Color.FromArgb((int)(_textColor.X * 255), (int)(_textColor.Y * 255), (int)(_textColor.Z * 255)), Color.Transparent), "Button");
+            if (_text.Length > 0)
+            {
+                _textRender = Texture.LoadFromBmp(Window.textRenderer.RenderString(_text, Color.FromArgb((int)(_textColor.X * 255), (int)(_textColor.Y * 255), (int)(_textColor.Z * 255)), Color.Transparent), "Button");
+            }
         }
 
         public void OnClick()
@@ -97,7 +100,10 @@ namespace Kee5Engine
         public void Draw()
         {
             Window.spriteRenderer.DrawSprite(_background);
-            Window.spriteRenderer.DrawSprite(_textRender, new Vector2(posX, posY), _textRender.Size, layer + 0.01f, 0f, Vector4.One);
+            if (_text.Length > 0)
+            {
+                Window.spriteRenderer.DrawSprite(_textRender, new Vector2(posX, posY), _textRender.Size, layer + 0.01f, 0f, Vector4.One);
+            }
         }
 
         public void Update()
