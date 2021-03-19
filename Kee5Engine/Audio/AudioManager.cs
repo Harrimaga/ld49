@@ -14,6 +14,10 @@ namespace Kee5Engine.Audio
         private static WaveOut music = null;
         private static List<WaveOut> sfxs = new List<WaveOut>();
 
+        /// <summary>
+        /// Play music file from path
+        /// </summary>
+        /// <param name="file">Path to music file</param>
         public static void PlayMusic(string file)
         {
             WaveFileReader reader = new WaveFileReader(file);
@@ -28,6 +32,10 @@ namespace Kee5Engine.Audio
             music.Play();
         }
 
+        /// <summary>
+        /// Play sound effect from path
+        /// </summary>
+        /// <param name="file">Path to sfx file</param>
         public static void PlaySFX(string file)
         {
             WaveFileReader read = new WaveFileReader(file);
@@ -37,6 +45,9 @@ namespace Kee5Engine.Audio
             sfxs.Add(sfx);
         }
 
+        /// <summary>
+        /// Update the AudioManager
+        /// </summary>
         public static void Update()
         {
             if (sfxs.Count > 0)
@@ -44,6 +55,7 @@ namespace Kee5Engine.Audio
                 List<WaveOut> nw = new List<WaveOut>();
                 for (int i = sfxs.Count - 1; i >= 0; i--)
                 {
+                    // Remove sound effects if they are finished
                     if (sfxs[i].PlaybackState == PlaybackState.Stopped)
                     {
                         sfxs[i].Dispose();
