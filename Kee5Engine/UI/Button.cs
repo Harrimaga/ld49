@@ -20,6 +20,19 @@ namespace Kee5Engine
         private Vector3 _textColor;
         private bool _isStatic;
 
+        /// <summary>
+        /// Create a new text-only Button
+        /// </summary>
+        /// <param name="posX">X position</param>
+        /// <param name="posY">Y position</param>
+        /// <param name="width">Width</param>
+        /// <param name="height">Height</param>
+        /// <param name="layer">Drawing Layer</param>
+        /// <param name="text">Button Text</param>
+        /// <param name="textColor">Button Text Color</param>
+        /// <param name="isStatic">True if not effected by camera movement</param>
+        /// <param name="onClickAction">Is called when the button is left clicked</param>
+        /// <param name="onRightClickAction">Is called when the button is right clicked</param>
         public Button(float posX, float posY, float width, float height, float layer, string text, Vector3 textColor, bool isStatic, EventAction onClickAction, EventAction onRightClickAction = null)
         {
             this.posX = posX;
@@ -38,6 +51,19 @@ namespace Kee5Engine
             Load("Pixel");
         }
 
+        /// <summary>
+        /// Create a new sprite-only Button
+        /// </summary>
+        /// <param name="posX">X position</param>
+        /// <param name="posY">Y position</param>
+        /// <param name="width">Width</param>
+        /// <param name="height">Height</param>
+        /// <param name="layer">Drawing Layer</param>
+        /// <param name="sprite">Button Background Sprite</param>
+        /// <param name="spriteColor">Background Sprite Color</param>
+        /// <param name="isStatic">True if not effected by camera movement</param>
+        /// <param name="onClickAction">Is called when the button is left clicked</param>
+        /// <param name="onRightClickAction">Is called when the button is right clicked</param>
         public Button(float posX, float posY, float width, float height, float layer, string sprite, Vector4 spriteColor, bool isStatic, EventAction onClickAction, EventAction onRightClickAction = null)
         {
             this.posX = posX;
@@ -56,6 +82,21 @@ namespace Kee5Engine
             Load(sprite);
         }
 
+        /// <summary>
+        /// Create a new Text + Sprite button
+        /// </summary>
+        /// <param name="posX">X position</param>
+        /// <param name="posY">Y position</param>
+        /// <param name="width">Width</param>
+        /// <param name="height">Height</param>
+        /// <param name="layer">Drawing Layer</param>
+        /// <param name="sprite">Button Background Sprite</param>
+        /// <param name="text">Button Text</param>
+        /// <param name="spriteColor">Background Sprite Color</param>
+        /// <param name="textColor">Button Text Color</param>
+        /// <param name="isStatic">True if not effected by camera movement</param>
+        /// <param name="onClickAction">Is called when the button is left clicked</param>
+        /// <param name="onRightClickAction">Is called when the button is right clicked</param>
         public Button(float posX, float posY, float width, float height, float layer, string sprite, string text, Vector4 spriteColor, Vector3 textColor, bool isStatic, EventAction onClickAction, EventAction onRightClickAction = null)
         {
             this.posX = posX;
@@ -74,11 +115,17 @@ namespace Kee5Engine
             Load(sprite);
         }
 
+        /// <summary>
+        /// Load the texture for the button
+        /// </summary>
+        /// <param name="sprite">Background Sprite</param>
         private void Load(string sprite)
         {
             startPosX = posX;
             startPosY = posY;
             _background = new Sprite(Window.textures.GetTexture(sprite), width, height, posX, posY, layer, 0f, _spriteColor);
+
+            // TODO: Different fonts for each button
             Window.textRenderer.SetSize(width / 4);
             Window.textRenderer.SetFont("Fonts/arial.ttf");
             if (_text.Length > 0)
@@ -87,16 +134,25 @@ namespace Kee5Engine
             }
         }
 
+        /// <summary>
+        /// Is called when the button is clicked
+        /// </summary>
         public void OnClick()
         {
             OnClickAction();
         }
 
+        /// <summary>
+        /// Is called when the button is right clicked
+        /// </summary>
         public void OnRightClick()
         {
             OnRightClickAction();
         }
 
+        /// <summary>
+        /// Draw the Button
+        /// </summary>
         public void Draw()
         {
             Window.spriteRenderer.DrawSprite(_background);
@@ -106,6 +162,9 @@ namespace Kee5Engine
             }
         }
 
+        /// <summary>
+        /// Update the button
+        /// </summary>
         public void Update()
         {
             if (_isStatic)
@@ -117,6 +176,12 @@ namespace Kee5Engine
             }
         }
 
+        /// <summary>
+        /// Check if a click was within the bounds of the button
+        /// </summary>
+        /// <param name="x">Click x position</param>
+        /// <param name="y">Click y position</param>
+        /// <returns><code>True</code> if the click was within the bounds</returns>
         public bool IsInButton(float x, float y)
         {
             return x + Window.camera.Position.X >= posX - width / 2 && x + Window.camera.Position.X <= posX + width / 2 && y + Window.camera.Position.Y >= posY - height / 2 && y + Window.camera.Position.Y <= posY + height / 2;

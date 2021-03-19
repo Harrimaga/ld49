@@ -10,6 +10,9 @@ namespace Kee5Engine
     {
         private Window gameWindow;
 
+        /// <summary>
+        /// Initiate new Game
+        /// </summary>
         public Game()
         {
             gameWindow = new Window(1920, 1080, "game");

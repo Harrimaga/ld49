@@ -6,11 +6,17 @@ using System.Text;
 
 namespace Kee5Engine
 {
+    /// <summary>
+    /// Static class for holding all things that need to be globally accessable
+    /// </summary>
     public static class Globals
     {
         public static Vector2 windowSize;
         public static List<Button> activeButtons = new List<Button>();
 
+        /// <summary>
+        /// Update the active buttons and the AudioManager
+        /// </summary>
         public static void Update()
         {
             foreach (Button button in activeButtons)
@@ -20,6 +26,9 @@ namespace Kee5Engine
             AudioManager.Update();
         }
 
+        /// <summary>
+        /// Draw the active buttons
+        /// </summary>
         public static void Draw()
         {
             foreach (Button button in activeButtons)
