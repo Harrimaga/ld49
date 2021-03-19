@@ -66,6 +66,8 @@ namespace Kee5Engine
 
         public static TextRenderer2D textRenderer;
 
+        private Sprite _player, _backGround;
+
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
             new NativeWindowSettings { Size = new Vector2i(width, height), Title = title })
@@ -86,7 +88,7 @@ namespace Kee5Engine
         // Initialize OpenGL
         protected override void OnLoad()
         {
-            AudioManager.PlayMusic("Audio/Music/Track17.wav");
+            //AudioManager.PlayMusic("Audio/Music/Track17.wav");
 
             // Set the background colour after we clear it
             GL.ClearColor(0.05f, 0.05f, 0.05f, 1f);
@@ -119,7 +121,10 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
-            Globals.activeButtons.Add(new Button(960, 540, 400, 200, 2, "Test", new Vector4(0.2f, 0, 0, 1), true, () => { Console.WriteLine("Clicked!"); }));
+            _player = new Sprite(textures.GetTexture("PlayerIdle"), 128, 128, 960, 540, 1f, 0, Vector4.One, 4, 0.1);
+            _backGround = new Sprite(textures.GetTexture("Test"), 1920, 1080, 960, 540, 1f, 0, Vector4.One);
+
+            //Globals.activeButtons.Add(new Button(960, 540, 400, 200, 2, "Test", new Vector4(0.2f, 0, 0, 1), true, () => { Console.WriteLine("Clicked!"); }));
 
 
             base.OnLoad();
@@ -143,14 +148,9 @@ namespace Kee5Engine
 
             // Draw a Sprite:
             // Window.spriteRenderer is static, so draws can be made anywhere
-            //spriteRenderer.DrawSprite(
-            //    textures.GetTexture("Test"),        // Texture
-            //    new Vector2(1920 / 2, 1080 / 2),    // Position (center-origin)
-            //    new Vector2(1920f, 1080f),          // Size
-            //    1f,                                 // Layer
-            //    0f,                                 // Rotation
-            //    new Vector4(1, 1, 1, 1)             // Colour (r, g, b, a)
-            //    );
+            //_backGround.Draw();
+
+            _player.Draw();
 
             //spriteRenderer.DrawSprite(
             //    textures.GetTexture("text"),
@@ -186,10 +186,10 @@ namespace Kee5Engine
         {
             timeElapsed += args.Time;
 
-            if (!IsFocused)
-            {
-                return;
-            }
+            //if (!IsFocused)
+            //{
+            //    return;
+            //}
 
             // Update the InputHandler
             inputHandler.Update(KeyboardState, MouseState);
@@ -202,6 +202,8 @@ namespace Kee5Engine
                 // Close the window
                 Close();
             }
+
+            _player.Update(args.Time);
 
             Globals.Update();
 

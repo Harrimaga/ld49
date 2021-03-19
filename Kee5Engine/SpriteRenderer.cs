@@ -47,7 +47,7 @@ namespace Kee5Engine
                 vertices[i * 40 + 1] = s.posY + s.height / 2;
                 vertices[i * 40 + 2] = s.posZ;
                            
-                vertices[i * 40 + 3] = 1.0f;
+                vertices[i * 40 + 3] = s.texX + (float)s.currentFrame / (float)s.frames;
                 vertices[i * 40 + 4] = 1.0f;
                              
                 vertices[i * 40 + 5] = s.color[0];
@@ -58,11 +58,11 @@ namespace Kee5Engine
                 vertices[i * 40 + 9] = s.texID;
                              
                              
-                vertices[i * 40 + 10]  = s.posX + s.width / 2;
+                vertices[i * 40 + 10] = s.posX + s.width / 2;
                 vertices[i * 40 + 11] = s.posY - s.height / 2;
                 vertices[i * 40 + 12] = s.posZ;
                             
-                vertices[i * 40 + 13] = 1.0f;
+                vertices[i * 40 + 13] = s.texX + (float)s.currentFrame / (float)s.frames;
                 vertices[i * 40 + 14] = 0.0f;
                             
                 vertices[i * 40 + 15] = s.color[0];
@@ -77,7 +77,7 @@ namespace Kee5Engine
                 vertices[i * 40 + 21] = s.posY - s.height / 2;
                 vertices[i * 40 + 22] = s.posZ;
                              
-                vertices[i * 40 + 23] = 0.0f;
+                vertices[i * 40 + 23] = (float)s.currentFrame / (float)s.frames;
                 vertices[i * 40 + 24] = 0.0f;
                              
                 vertices[i * 40 + 25] = s.color[0];
@@ -92,7 +92,7 @@ namespace Kee5Engine
                 vertices[i * 40 + 31] = s.posY + s.height / 2;
                 vertices[i * 40 + 32] = s.posZ;
                              
-                vertices[i * 40 + 33] = 0.0f;
+                vertices[i * 40 + 33] = (float)s.currentFrame / (float)s.frames;
                 vertices[i * 40 + 34] = 1.0f;
                              
                 vertices[i * 40 + 35] = s.color[0];
@@ -165,34 +165,34 @@ namespace Kee5Engine
 
         public void DrawSprite(Sprite sprite)
         {
-            DrawSprite(sprite.texture, new Vector2(sprite.posX, sprite.posY), new Vector2(sprite.width, sprite.height), sprite.posZ, sprite.rotation, sprite.color);
-        }
-
-        public void DrawSprite(Texture texture, Vector2 position, Vector2 size, float layer, float rotation, Vector4 color)
-        {
-            if (position.X - Window.camera.Position.X > Window.WindowSize.X + 100 + size.X / 2
-                || position.Y - Window.camera.Position.Y > Window.WindowSize.Y + 100 + size.Y / 2
-                || position.X - Window.camera.Position.X < -100 - size.X / 2
-                || position.Y - Window.camera.Position.Y < -100 - size.Y / 2)
+            if (sprite.posX - Window.camera.Position.X > Window.WindowSize.X + 100 + sprite.width / 2
+                || sprite.posY - Window.camera.Position.Y > Window.WindowSize.Y + 100 + sprite.height / 2
+                || sprite.posX - Window.camera.Position.X < -100 - sprite.width / 2
+                || sprite.posY - Window.camera.Position.Y < -100 - sprite.height / 2)
             {
                 return;
             }
 
             Window.spritesDrawn += 1;
-            
-            if (!_texList.Contains(texture))
+
+            if (!_texList.Contains(sprite.texture))
             {
-                _texList.Add(texture);
+                _texList.Add(sprite.texture);
             }
 
-            _drawList.Add(new Sprite(texture, size.X, size.Y, position.X, position.Y, layer, rotation, color, (float)_texList.Count - 1));
+            _drawList.Add(sprite);
 
             if (_drawList.Count > _maxQuadCount || _texList.Count > _maxTextureCount - 1)
             {
                 Flush();
                 Begin();
             }
-            
+        }
+
+        public void DrawSprite(Texture texture, Vector2 position, Vector2 size, float layer, float rotation, Vector4 color)
+        {
+
+            DrawSprite(new Sprite(texture, size.X, size.Y, position.X, position.Y, layer, rotation, color, 1, (float)_texList.Count - 1));
         }
 
         private void initRenderData()
