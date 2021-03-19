@@ -11,6 +11,9 @@ namespace Kee5Engine
         [System.Runtime.InteropServices.DllImport("nvapi.dll", EntryPoint = "fake")]
         static extern int LoadNvApi32();
 
+        /// <summary>
+        /// Remove that pesky Intel
+        /// </summary>
         private static void RemoveIntel()
         {
             try
@@ -23,6 +26,10 @@ namespace Kee5Engine
             catch { } // will always fail since 'fake' entry point doesn't exists
         }
 
+        /// <summary>
+        /// Run the game!
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             RemoveIntel();

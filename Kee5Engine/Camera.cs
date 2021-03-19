@@ -8,6 +8,7 @@ namespace Kee5Engine
 {
     public class Camera
     {
+        // Directional Unit Vectors
         private Vector3 _front = -Vector3.UnitZ;
         private Vector3 _up = Vector3.UnitY;
         private Vector3 _right = Vector3.UnitX;
@@ -21,6 +22,13 @@ namespace Kee5Engine
         // FOV
         private float _fov = MathHelper.PiOver2;
 
+        /// <summary>
+        /// Create a new Camera
+        /// </summary>
+        /// <param name="position">Start position</param>
+        /// <param name="aspectRatio">Aspect Ratio</param>
+        /// <param name="speed">Movement Speed</param>
+        /// <param name="sensitivity">Mouse Sensitivity</param>
         public Camera(Vector3 position, float aspectRatio, float speed, float sensitivity)
         {
             Position = position;
@@ -74,11 +82,19 @@ namespace Kee5Engine
             }
         }
 
+        /// <summary>
+        /// Gets the view matrix based on the Camera's position
+        /// </summary>
+        /// <returns><code>Matrix4</code> view Matrix</returns>
         public Matrix4 GetViewMatrix()
         {
             return Matrix4.LookAt(Position, Position + _front, _up);
         }
 
+        /// <summary>
+        /// Gets the projection matrix based on the window size
+        /// </summary>
+        /// <returns><code>Matrix4</code> projection Matrix</returns>
         public Matrix4 GetProjectionMatrix()
         {
             return Matrix4.CreateOrthographicOffCenter(0, Globals.windowSize.X, Globals.windowSize.Y, 0, 0.01f, 100f);
@@ -97,6 +113,10 @@ namespace Kee5Engine
             _up = Vector3.Normalize(Vector3.Cross(_right, _front));
         }
 
+        /// <summary>
+        /// Update the camera's position based on buttons pressed
+        /// </summary>
+        /// <param name="deltaTime">Time passed since last update call</param>
         public void Update(double deltaTime)
         {
             if (Window.inputHandler.IsKeyDown(Keys.W))

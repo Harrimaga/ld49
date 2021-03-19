@@ -17,57 +17,25 @@ namespace Kee5Engine
 {
     public class Window : GameWindow
     {
-        // (0, 0) is the center of the screen
-        private readonly float[] _vertices =
-        {
-            // Position         Texture coordinates
-            -1f, -1f, 0.0f, 1.0f, 1.0f, // Bottom-left vertex
-             1f, -1f, 0.0f, 1.0f, 0.0f, // Bottom-right vertex
-             1f,  1f, 0.0f, 0.0f, 0.0f, // Top-right vertex
-            -1f,  1f, 0.0f, 0.0f, 1.0f  // Top-left vertex
-        };
-
-        private readonly uint[] _indices =
-        {
-            0, 1, 3, // Triangle 1 
-            1, 2, 3  // Triangle 2
-        };
-
         public static double timeElapsed = 0;
 
-        private int _vertexBufferObject;
-
-        private int _vertexArrayObject;
-
         private Shader _shader;
-
-        private Texture _texture;
-
         public static TextureList textures;
-
-        private int _elementBufferObject;
-
-        private double _time;
-
         public static Camera camera;
-
-        private bool _firstMove = true;
-
-        private Vector2 _lastPost;
-
         public static SpriteRenderer spriteRenderer;
-
         public static InputHandler inputHandler;
         public static float screenScaleX, screenScaleY;
-
         public static int drawCalls = 0, spritesDrawn = 0;
-
         public static Vector2 WindowSize { get; private set; }
-
         public static TextRenderer2D textRenderer;
-
         private Sprite _player, _backGround;
 
+        /// <summary>
+        /// Create an OpenGL GameWindow
+        /// </summary>
+        /// <param name="width">Width of the Window</param>
+        /// <param name="height">Height of the Window</param>
+        /// <param name="title">Title of the window</param>
         public Window(int width, int height, string title) : base(
             new GameWindowSettings { RenderFrequency = 60, UpdateFrequency = 60 },
             new NativeWindowSettings { Size = new Vector2i(width, height), Title = title })
@@ -75,6 +43,7 @@ namespace Kee5Engine
             // Create InputHandler
             inputHandler = new InputHandler();
 
+            // Create texture List. All textures are loaded in here
             textures = new TextureList();
 
             WindowSize = Size;
@@ -85,26 +54,26 @@ namespace Kee5Engine
             Globals.windowSize = Size;
         }
 
-        // Initialize OpenGL
+        /// <summary>
+        /// Is called when the Window is loaded
+        /// </summary>
         protected override void OnLoad()
         {
-            //AudioManager.PlayMusic("Audio/Music/Track17.wav");
-
             // Set the background colour after we clear it
             GL.ClearColor(0.05f, 0.05f, 0.05f, 1f);
 
+            // Enable DepthTest, if the depth of fragments is too deep, they are discarded
             GL.Enable(EnableCap.DepthTest);
 
+            // Initiate Text Renderer
             textRenderer = new TextRenderer2D();
-            textRenderer.SetFont("Fonts/arial.ttf");
-            textRenderer.SetSize(128);
-            System.Drawing.Bitmap Text = textRenderer.RenderString("Hello", System.Drawing.Color.White, System.Drawing.Color.Transparent);
-            textures.LoadTexture(Text, "text");
 
-            textRenderer.SetFont("Fonts/ariali.ttf");
-            textRenderer.SetSize(64);
-            System.Drawing.Bitmap text2 = textRenderer.RenderString("This is some text", System.Drawing.Color.Black, System.Drawing.Color.Transparent);
-            textures.LoadTexture(text2, "text2");
+            // Set TextRenderer Font
+            // This needs to be called every time you want to change fonts (including italics and bold)
+            textRenderer.SetFont("Fonts/arial.ttf");
+
+            // Set Font Size, also needs to be called every time you want to change it
+            textRenderer.SetSize(128);
 
             // Create the shaders
             _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
@@ -121,24 +90,30 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
+            // Create 2 test Sprites, 1 animated one, 1 non animated one
             _player = new Sprite(textures.GetTexture("PlayerIdle"), 128, 128, 960, 540, 1f, 0, Vector4.One, 4, 0.1);
-            _backGround = new Sprite(textures.GetTexture("Test"), 1920, 1080, 960, 540, 1f, 0, Vector4.One);
+            _backGround = new Sprite(textures.GetTexture("Test"), 1920, 1080, 960, 540, -1f, 0, Vector4.One);
 
-            //Globals.activeButtons.Add(new Button(960, 540, 400, 200, 2, "Test", new Vector4(0.2f, 0, 0, 1), true, () => { Console.WriteLine("Clicked!"); }));
-
+            // Create a test button
+            Globals.activeButtons.Add(new Button(200, 980, 400, 200, 2, "Test", "Button", new Vector4(0.2f, 0, 0, 1), Vector3.One, true, () => { Console.WriteLine("Clicked!"); }));
 
             base.OnLoad();
         }
 
-        // Create Render loop
+        /// <summary>
+        /// Is called on every render frame
+        /// </summary>
+        /// <param name="args">FrameEventArgs mainly keep track of the time between render frames</param>
         protected override void OnRenderFrame(FrameEventArgs args)
         {
+            // Reset Debug Data
             drawCalls = 0;
             spritesDrawn = 0;
             
             // Clear the image
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            // Begin the Sprite Batch
             spriteRenderer.Begin();
 
             // Bind the shader
@@ -146,34 +121,17 @@ namespace Kee5Engine
             _shader.SetMatrix4("view", camera.GetViewMatrix());
             _shader.SetMatrix4("projection", camera.GetProjectionMatrix());
 
-            // Draw a Sprite:
-            // Window.spriteRenderer is static, so draws can be made anywhere
-            //_backGround.Draw();
-
+            // Draw Sprites:
+            _backGround.Draw();
             _player.Draw();
 
-            //spriteRenderer.DrawSprite(
-            //    textures.GetTexture("text"),
-            //    new Vector2(960, 540),
-            //    textures.GetTexture("text").Size,
-            //    2f,
-            //    0f,
-            //    new Vector4(1, 0, 0, 1)
-            //    );
-
-            //spriteRenderer.DrawSprite(
-            //    textures.GetTexture("text2"),
-            //    new Vector2(960, 700),
-            //    textures.GetTexture("text2").Size,
-            //    2f,
-            //    0f,
-            //    new Vector4(1, 1, 1, 1)
-            //    );
-
+            // Call Globals' draw method. This Draws all active buttons
             Globals.Draw();
 
+            // End the spriteBatch and Flush all remaining data to the window buffer
             spriteRenderer.End();
 
+            // Set the title to reflect debug data
             Title = $"Game | FPS: {Math.Round(1 / args.Time)} | Draw Calls: {drawCalls} | Sprites Drawn: {spritesDrawn}";
 
             // Swap the buffers to render on screen
@@ -182,18 +140,26 @@ namespace Kee5Engine
             base.OnRenderFrame(args);
         }
 
+        /// <summary>
+        /// Is called every update frame
+        /// </summary>
+        /// <param name="args">FrameEventArgs mainly keeps track of the time between update frames</param>
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
+            // Increment the total elapsed time
             timeElapsed += args.Time;
 
-            //if (!IsFocused)
-            //{
-            //    return;
-            //}
+            // Return if the window isn't focussed
+            // If running with break points, disable this, or this will always return
+            if (!IsFocused)
+            {
+                return;
+            }
 
             // Update the InputHandler
             inputHandler.Update(KeyboardState, MouseState);
 
+            // Update the Camera
             camera.Update(args.Time);
 
             // Check if the Escape button is pressed
@@ -203,13 +169,19 @@ namespace Kee5Engine
                 Close();
             }
 
+            // Update a Sprite
             _player.Update(args.Time);
 
+            // Call Globals' update, this updates the active Buttons as well as the AudioManager
             Globals.Update();
 
             base.OnUpdateFrame(args);
         }
 
+        /// <summary>
+        /// Called whenever the mousebutton is clicked
+        /// </summary>
+        /// <param name="e">Information about the click</param>
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             foreach (Button button in Globals.activeButtons)
@@ -222,6 +194,10 @@ namespace Kee5Engine
             base.OnMouseDown(e);
         }
 
+        /// <summary>
+        /// Called whenever the window is resized
+        /// </summary>
+        /// <param name="e">Information about the new window</param>
         protected override void OnResize(ResizeEventArgs e)
         {
             // Call GL.viewport to resize OpenGL's viewport to match the new size
@@ -230,6 +206,10 @@ namespace Kee5Engine
             base.OnResize(e);
         }
 
+        /// <summary>
+        /// Called whenever the window is Quit.
+        /// Unloads and deletes all resources
+        /// </summary>
         protected override void OnUnload()
         {
             // Unload all the resources
@@ -238,8 +218,7 @@ namespace Kee5Engine
             GL.UseProgram(0);
 
             // Delete all the resources
-            GL.DeleteBuffer(_vertexArrayObject);
-            GL.DeleteVertexArray(_vertexArrayObject);
+            spriteRenderer.UnLoad();
 
             GL.DeleteProgram(_shader.Handle);
             textures.UnLoad();
