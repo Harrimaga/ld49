@@ -98,7 +98,6 @@ namespace Kee5Engine
             float stringWidth = 0, stringHeight = 0;
             float overrun = 0, underrun = 0;
             float kern = 0;
-            int spacingError = 0;
             int rightEdge = 0;
             float top = 0, bottom = 0;
 
