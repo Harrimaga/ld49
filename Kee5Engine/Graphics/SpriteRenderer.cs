@@ -233,7 +233,7 @@ namespace Kee5Engine
             // If the drawlist contains more quads than the max quad count,
             // or the maximum amount of textures are used,
             // Flush the batch and start a new one
-            if (_drawList.Count > _maxQuadCount || _texList.Count > _maxTextureCount - 1)
+            if (_drawList.Count > _maxQuadCount - 1|| _texList.Count > _maxTextureCount - 1)
             {
                 Flush();
                 Begin();
@@ -290,7 +290,7 @@ namespace Kee5Engine
             // Bind the VBO
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
             // Allocate memory for the buffer
-            GL.BufferData(BufferTarget.ArrayBuffer, _maxVertexCount * 10 * sizeof(float), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, _maxVertexCount * 40 * sizeof(float), IntPtr.Zero, BufferUsageHint.DynamicDraw);
 
             // Bind the VAO
             GL.BindVertexArray(_vertexArrayObject);
