@@ -182,7 +182,7 @@ namespace Kee5Engine
             GL.BindVertexArray(_vertexArrayObject);
 
             // Draw the quads in the batch
-            GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(PrimitiveType.Triangles, _drawList.Count * 6, DrawElementsType.UnsignedInt, 0);
 
             // Unbind the buffers
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
