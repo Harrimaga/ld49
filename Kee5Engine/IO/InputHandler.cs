@@ -8,11 +8,13 @@ namespace Kee5Engine.IO
 {
     public class InputHandler
     {
-        private KeyboardState state;
-        private MouseState mState;
+        private KeyboardState state, prevstate;
+        private MouseState mState, prevmstate;
 
         public void Update(KeyboardState kstate, MouseState mstate)
         {
+            prevstate = state;
+            prevmstate = mState;
             state = kstate;
             mState = mstate;
         }
@@ -24,7 +26,7 @@ namespace Kee5Engine.IO
 
         public bool IsKeyPressed(Keys key)
         {
-            return state.IsKeyPressed(key);
+            return state.IsKeyDown(key) && !prevstate.IsKeyDown(key);
         }
 
         public bool IsKeyReleased(Keys key)

@@ -157,7 +157,7 @@ namespace Kee5Engine
             }
 
             // Update the InputHandler
-            inputHandler.Update(KeyboardState, MouseState);
+            inputHandler.Update(KeyboardState.GetSnapshot(), MouseState.GetSnapshot());
 
             // Update the Camera
             camera.Update(args.Time);
