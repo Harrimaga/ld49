@@ -47,8 +47,24 @@ namespace Kee5Engine
             for (int i = 0; i < SpriteCount; i++)
             {
                 Sprite s = drawList[i];
-                vertices[i * 40 + 0] = s.posX + s.width / 2;
-                vertices[i * 40 + 1] = s.posY + s.height / 2;
+
+                Matrix3 rotation = Matrix3.CreateRotationZ(-s.rotation);
+
+
+                Vector3 p1 = new Vector3(s.posX + s.width / 2, s.posY + s.height / 2, 1);
+                Vector3 p2 = new Vector3(s.posX + s.width / 2, s.posY - s.height / 2, 1);
+                Vector3 p3 = new Vector3(s.posX - s.width / 2, s.posY - s.height / 2, 1);
+                Vector3 p4 = new Vector3(s.posX - s.width / 2, s.posY + s.height / 2, 1);
+
+                Vector3 center = new Vector3(s.posX, s.posY, 1);
+
+                p1 = rotation * (p1 - center) + center;
+                p2 = rotation * (p2 - center) + center;
+                p3 = rotation * (p3 - center) + center;
+                p4 = rotation * (p4 - center) + center;
+
+                vertices[i * 40 + 0] = p1.X;
+                vertices[i * 40 + 1] = p1.Y;
                 vertices[i * 40 + 2] = s.posZ;
                            
                 vertices[i * 40 + 3] = s.texX + (float)s.currentFrame / (float)s.frames;
@@ -62,8 +78,8 @@ namespace Kee5Engine
                 vertices[i * 40 + 9] = s.texID;
                              
                              
-                vertices[i * 40 + 10] = s.posX + s.width / 2;
-                vertices[i * 40 + 11] = s.posY - s.height / 2;
+                vertices[i * 40 + 10] = p2.X;
+                vertices[i * 40 + 11] = p2.Y;
                 vertices[i * 40 + 12] = s.posZ;
                             
                 vertices[i * 40 + 13] = s.texX + (float)s.currentFrame / (float)s.frames;
@@ -77,8 +93,8 @@ namespace Kee5Engine
                 vertices[i * 40 + 19] = s.texID;
 
 
-                vertices[i * 40 + 20] = s.posX - s.width / 2;
-                vertices[i * 40 + 21] = s.posY - s.height / 2;
+                vertices[i * 40 + 20] = p3.X;
+                vertices[i * 40 + 21] = p3.Y;
                 vertices[i * 40 + 22] = s.posZ;
                              
                 vertices[i * 40 + 23] = (float)s.currentFrame / (float)s.frames;
@@ -92,8 +108,8 @@ namespace Kee5Engine
                 vertices[i * 40 + 29] = s.texID;
 
 
-                vertices[i * 40 + 30] = s.posX - s.width / 2;
-                vertices[i * 40 + 31] = s.posY + s.height / 2;
+                vertices[i * 40 + 30] = p4.X;
+                vertices[i * 40 + 31] = p4.Y;
                 vertices[i * 40 + 32] = s.posZ;
                              
                 vertices[i * 40 + 33] = (float)s.currentFrame / (float)s.frames;
