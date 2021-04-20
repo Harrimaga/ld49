@@ -14,6 +14,8 @@ namespace Kee5Engine
         public static Vector2 windowSize;
         public static List<Button> activeButtons = new List<Button>();
 
+        public static int unloaded;
+
         /// <summary>
         /// Update the active buttons and the AudioManager
         /// </summary>

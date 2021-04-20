@@ -223,6 +223,13 @@ namespace Kee5Engine
             GL.DeleteProgram(_shader.Handle);
             textures.UnLoad();
 
+            foreach (Button button in Globals.activeButtons)
+            {
+                button.UnLoad();
+            }
+
+            Console.WriteLine($"{Globals.unloaded} textures unloaded");
+
             base.OnUnload();
         }
     }

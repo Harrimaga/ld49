@@ -66,13 +66,12 @@ namespace Kee5Engine
         /// </summary>
         public void UnLoad()
         {
-            int unloaded = 0;
             foreach (Texture texture in _textures.Values)
             {
+                Console.WriteLine($"Unloaded {texture.name}");
                 GL.DeleteTexture(texture.Handle);
-                unloaded++;
+                Globals.unloaded++;
             }
-            Console.WriteLine($"{unloaded} textures unloaded");
         }
     }
 }

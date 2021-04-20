@@ -1,4 +1,5 @@
-﻿using OpenTK.Mathematics;
+﻿using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -203,6 +204,13 @@ namespace Kee5Engine
         public bool IsInButton(float x, float y)
         {
             return x + Window.camera.Position.X >= posX - width / 2 && x + Window.camera.Position.X <= posX + width / 2 && y + Window.camera.Position.Y >= posY - height / 2 && y + Window.camera.Position.Y <= posY + height / 2;
+        }
+
+        public void UnLoad()
+        {
+            Console.WriteLine($"Unloaded {_textRender.name}");
+            GL.DeleteTexture(_textRender.Handle);
+            Globals.unloaded++;
         }
     }
 }
