@@ -24,7 +24,7 @@ namespace Kee5Engine
         /// <returns><code>Texture</code></returns>
         public static Texture LoadFromFile(string path, string name)
         {
-            return LoadFromBmp(new Bitmap(path), name);
+            return LoadFromBmp(new Bitmap(path), name, true);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Kee5Engine
         /// <param name="bmp">Bitmap</param>
         /// <param name="name">Name of the texture</param>
         /// <returns><code>Texture</code></returns>
-        public static Texture LoadFromBmp(Bitmap bmp, string name)
+        public static Texture LoadFromBmp(Bitmap bmp, string name, bool pixelart)
         {
             // Generate Handle
             int handle = GL.GenTexture();
@@ -67,10 +67,18 @@ namespace Kee5Engine
                 size = new Vector2(image.Width, image.Height);
             }
 
-            // Set min and mag filter. These are used for scaling down and up, respectively
-            // Nearest is used, as it just grabs the nearest pixel, giving the pixellated feel
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            if (pixelart)
+            {
+                // Set min and mag filter. These are used for scaling down and up, respectively
+                // Nearest is used, as it just grabs the nearest pixel, giving the pixellated feel
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            }
+            else
+            {
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            }
 
             // Set wrapping mode, this is how the texture wraps
             // S is for X axis, T is for Y axis

@@ -8,6 +8,13 @@ using SharpFont;
 
 namespace Kee5Engine
 {
+    public enum TextAlignment
+    {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
     public class TextRenderer2D
     {
         private Library _lib;

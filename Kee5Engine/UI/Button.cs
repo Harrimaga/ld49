@@ -15,6 +15,8 @@ namespace Kee5Engine
         private EventAction OnClickAction { get; set; }
         private EventAction OnRightClickAction { get; set; }
 
+        private TextAlignment _alignment;
+
         public float posX, posY, width, height, layer, startPosX, startPosY;
         private Vector4 _spriteColor;
         private Vector3 _textColor;
@@ -33,7 +35,7 @@ namespace Kee5Engine
         /// <param name="isStatic">True if not effected by camera movement</param>
         /// <param name="onClickAction">Is called when the button is left clicked</param>
         /// <param name="onRightClickAction">Is called when the button is right clicked</param>
-        public Button(float posX, float posY, float width, float height, float layer, string text, Vector3 textColor, bool isStatic, EventAction onClickAction, EventAction onRightClickAction = null)
+        public Button(float posX, float posY, float width, float height, float layer, string text, Vector3 textColor, TextAlignment alignment, bool isStatic, EventAction onClickAction, EventAction onRightClickAction = null)
         {
             this.posX = posX;
             this.posY = posY;
@@ -44,6 +46,7 @@ namespace Kee5Engine
             _text = text;
             _textColor = textColor;
             _spriteColor = new Vector4(0, 0, 0, 0);
+            _alignment = alignment;
 
             OnClickAction = onClickAction;
             OnRightClickAction = onRightClickAction == null ? () => { } : onRightClickAction;
@@ -97,7 +100,7 @@ namespace Kee5Engine
         /// <param name="isStatic">True if not effected by camera movement</param>
         /// <param name="onClickAction">Is called when the button is left clicked</param>
         /// <param name="onRightClickAction">Is called when the button is right clicked</param>
-        public Button(float posX, float posY, float width, float height, float layer, string sprite, string text, Vector4 spriteColor, Vector3 textColor, bool isStatic, EventAction onClickAction, EventAction onRightClickAction = null)
+        public Button(float posX, float posY, float width, float height, float layer, string sprite, string text, Vector4 spriteColor, Vector3 textColor, TextAlignment alignment, bool isStatic, EventAction onClickAction, EventAction onRightClickAction = null)
         {
             this.posX = posX;
             this.posY = posY;
@@ -108,6 +111,7 @@ namespace Kee5Engine
             _text = text;
             _textColor = textColor;
             _spriteColor = spriteColor;
+            _alignment = alignment;
 
             OnClickAction = onClickAction;
             OnRightClickAction = onRightClickAction == null ? () => { } : onRightClickAction;
@@ -125,12 +129,15 @@ namespace Kee5Engine
             startPosY = posY;
             _background = new Sprite(Window.textures.GetTexture(sprite), width, height, posX, posY, layer, 0f, _spriteColor);
 
-            // TODO: Different fonts for each button
-            Window.textRenderer.SetSize(width / 4);
-            Window.textRenderer.SetFont("Fonts/arial.ttf");
+            LoadText();
+        }
+
+        private void LoadText()
+        {
+            Window.textRenderer.SetSize(Math.Min(width / 4, height / 2));
             if (_text.Length > 0)
             {
-                _textRender = Texture.LoadFromBmp(Window.textRenderer.RenderString(_text, Color.FromArgb((int)(_textColor.X * 255), (int)(_textColor.Y * 255), (int)(_textColor.Z * 255)), Color.Transparent), "Button");
+                _textRender = Texture.LoadFromBmp(Window.textRenderer.RenderString(_text, Color.FromArgb((int)(_textColor.X * 255), (int)(_textColor.Y * 255), (int)(_textColor.Z * 255)), Color.Transparent), "Button", false);
             }
         }
 
@@ -158,7 +165,18 @@ namespace Kee5Engine
             Window.spriteRenderer.DrawSprite(_background);
             if (_text.Length > 0)
             {
-                Window.spriteRenderer.DrawSprite(_textRender, new Vector2(posX, posY), _textRender.Size, layer + 0.01f, 0f, Vector4.One);
+                switch (_alignment)
+                {
+                    case TextAlignment.CENTER:
+                        Window.spriteRenderer.DrawSprite(_textRender, new Vector2(posX, posY), _textRender.Size, layer + 0.01f, 0f, Vector4.One);
+                        break;
+                    case TextAlignment.LEFT:
+                        Window.spriteRenderer.DrawSprite(_textRender, new Vector2(posX - width / 2 + _textRender.Size.X / 2 + 5, posY), _textRender.Size, layer + 0.01f, 0f, Vector4.One);
+                        break;
+                    case TextAlignment.RIGHT:
+                        Window.spriteRenderer.DrawSprite(_textRender, new Vector2(posX + width / 2 - _textRender.Size.X / 2 - 5, posY), _textRender.Size, layer + 0.01f, 0f, Vector4.One);
+                        break;
+                }
             }
         }
 

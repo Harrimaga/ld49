@@ -95,7 +95,7 @@ namespace Kee5Engine
             _backGround = new Sprite(textures.GetTexture("Test"), 1920, 1080, 960, 540, -1f, 0, Vector4.One);
 
             // Create a test button
-            Globals.activeButtons.Add(new Button(200, 980, 400, 200, 2, "Test", "Button", new Vector4(0.2f, 0, 0, 1), Vector3.One, true, () => { Console.WriteLine("Clicked!"); }));
+            Globals.activeButtons.Add(new Button(200, 980, 400, 200, 2, "Test", "Button", new Vector4(0.2f, 0, 0, 1), Vector3.One, TextAlignment.CENTER, true, () => { Console.WriteLine("Clicked!"); }));
 
             base.OnLoad();
         }

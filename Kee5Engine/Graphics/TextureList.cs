@@ -47,7 +47,7 @@ namespace Kee5Engine
         /// <param name="name">Name of the texture</param>
         public void LoadTexture(Bitmap image, string name)
         {
-            Texture texture = Texture.LoadFromBmp(image, name);
+            Texture texture = Texture.LoadFromBmp(image, name, false);
             _textures[name] = texture;
         }
 
