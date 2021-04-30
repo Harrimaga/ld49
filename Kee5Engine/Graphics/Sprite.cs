@@ -9,10 +9,10 @@ namespace Kee5Engine
     public class Sprite
     {
         public Texture texture;
-        public float width, height, posX, posY, posZ, rotation, texID, texX;
+        public float width, height, posX, posY, posZ, rotation, texX;
         public Vector4 color;
         public string name;
-        public int frames, currentFrame;
+        public int frames, currentFrame, texID;
         private double _animationTime, _timePassed;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Kee5Engine
         /// <param name="frames">Total frames in the spritesheet</param>
         /// <param name="animationTime">Time in seconds per frame</param>
         /// <param name="texID">ID of the texture in the batch</param>
-        public Sprite(Texture texture, float width, float height, float posX, float posY, float posZ, float rotation, Vector4 color, int frames = 1, double animationTime = 1, float texID = 0)
+        public Sprite(Texture texture, float width, float height, float posX, float posY, float posZ, float rotation, Vector4 color, int frames = 1, double animationTime = 1, int texID = 0)
         {
             this.texture = texture;
             this.width = width;

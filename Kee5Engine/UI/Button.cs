@@ -135,6 +135,8 @@ namespace Kee5Engine
 
         private void LoadText()
         {
+
+            // TODO: Fix text sizing
             Window.textRenderer.SetSize(Math.Min(width / 4, height / 2));
             if (_text.Length > 0)
             {
@@ -196,6 +198,36 @@ namespace Kee5Engine
         }
 
         /// <summary>
+        /// Sets the position of the button
+        /// </summary>
+        /// <param name="position">Center-origin position</param>
+        public void SetPosition(Vector2 position)
+        {
+            posX = position.X;
+            posY = position.Y;
+            _background.posX = position.X;
+            _background.posY = position.Y;
+        }
+
+        /// <summary>
+        /// Set the rotation of the button
+        /// </summary>
+        /// <param name="deg">Rotation in degrees</param>
+        public void SetRotation(float deg)
+        {
+            _background.rotation = MathHelper.DegreesToRadians(deg);
+        }
+
+        /// <summary>
+        /// Set the background color of the button
+        /// </summary>
+        /// <param name="color">Background color</param>
+        public void SetBackground(Vector4 color)
+        {
+            _background.color = color;
+        }
+
+        /// <summary>
         /// Check if a click was within the bounds of the button
         /// </summary>
         /// <param name="x">Click x position</param>
@@ -206,10 +238,16 @@ namespace Kee5Engine
             return x + Window.camera.Position.X >= posX - width / 2 && x + Window.camera.Position.X <= posX + width / 2 && y + Window.camera.Position.Y >= posY - height / 2 && y + Window.camera.Position.Y <= posY + height / 2;
         }
 
+        /// <summary>
+        /// Unload the button textures
+        /// </summary>
         public void UnLoad()
         {
-            Console.WriteLine($"Unloaded {_textRender.name}");
-            GL.DeleteTexture(_textRender.Handle);
+            if (_textRender != null)
+            {
+                Console.WriteLine($"Unloaded {_textRender.name}");
+                GL.DeleteTexture(_textRender.Handle);
+            }
             Globals.unloaded++;
         }
     }
