@@ -107,11 +107,19 @@ namespace Kee5Engine.Shaders
             }
         }
 
+        /// <summary>
+        /// Tell OpenGL to use this shader
+        /// </summary>
         public void Use()
         {
             GL.UseProgram(Handle);
         }
 
+        /// <summary>
+        /// Get the handle of the attribute
+        /// </summary>
+        /// <param name="attribName">Name of the attribute</param>
+        /// <returns><code>int</code> attribute handle</returns>
         public int GetAttribLocation(string attribName)
         {
             return GL.GetAttribLocation(Handle, attribName);

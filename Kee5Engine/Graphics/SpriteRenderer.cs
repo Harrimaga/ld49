@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Kee5Engine.Shaders;
 using OpenTK.Graphics.OpenGL4;
@@ -7,21 +8,32 @@ using OpenTK.Mathematics;
 
 namespace Kee5Engine
 {
+    // Struct memory should be in the same order as is written down
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct Vertex
+    {
+        float posX, posY, posZ, texX, texY, R, G, B, A;
+        int texId;
+        public Vertex(float posX, float posY, float posZ, float texX, float texY, float r, float g, float b, float a, int texId)
+        {
+            this.posX = posX;
+            this.posY = posY;
+            this.posZ = posZ;
+            this.texX = texX;
+            this.texY = texY;
+            R = r;
+            G = g;
+            B = b;
+            A = a;
+            this.texId = texId;
+        }
+    }
     public class SpriteRenderer
     {
 
-        private float[] _vertices =
+        private Vertex[] _vertices =
         {
-            // Position     Texture     Color
-            960f, 540f, 1f, 1.0f, 1.0f, 1f, 1f, 1f, 1f, // Bottom-right vertex
-            960f, 0f, 1f,   1.0f, 0.0f, 1f, 1f, 1f, 1f, // Top-right vertex
-            0f, 0f, 1f,     0.0f, 0.0f, 1f, 1f, 1f, 1f, // Top-left vertex
-            0f, 540f, 1f,   0.0f, 1.0f, 1f, 1f, 1f, 1f, // Bottom-left vertex
-
-            1920f, 540f, 1f,   1.0f, 1.0f, 1f, 1f, 1f, 1f, // Bottom-right vertex
-            1920f, 0f, 1f,     1.0f, 0.0f, 1f, 1f, 1f, 1f, // Top-right vertex
-            960f, 0f, 1f,   0.0f, 0.0f, 1f, 1f, 1f, 1f, // Top-left vertex
-            960f, 540f, 1f, 0.0f, 1.0f, 1f, 1f, 1f, 1f  // Bottom-left vertex
+           
         };
 
         private uint[] _indices =
@@ -37,11 +49,10 @@ namespace Kee5Engine
         /// </summary>
         /// <param name="drawList">List of sprites to be drawn this batch</param>
         /// <returns><code>float[]</code> of vertices</returns>
-        public float[] GetVertices(List<Sprite> drawList)
+        public Vertex[] GetVertices(List<Sprite> drawList)
         {
             int SpriteCount = drawList.Count;
-
-            float[] vertices = new float[SpriteCount * 40];
+            Vertex[] vertices = new Vertex[SpriteCount * 4];
 
             // For each Sprite, get the 40 required vertices and put them in the array
             for (int i = 0; i < SpriteCount; i++)
@@ -63,64 +74,14 @@ namespace Kee5Engine
                 p3 = rotation * (p3 - center) + center;
                 p4 = rotation * (p4 - center) + center;
 
-                vertices[i * 40 + 0] = p1.X;
-                vertices[i * 40 + 1] = p1.Y;
-                vertices[i * 40 + 2] = s.posZ;
-                           
-                vertices[i * 40 + 3] = s.texX + (float)s.currentFrame / (float)s.frames;
-                vertices[i * 40 + 4] = 1.0f;
-                             
-                vertices[i * 40 + 5] = s.color[0];
-                vertices[i * 40 + 6] = s.color[1];
-                vertices[i * 40 + 7] = s.color[2];
-                vertices[i * 40 + 8] = s.color[3];
-
-                vertices[i * 40 + 9] = s.texID;
-                             
-                             
-                vertices[i * 40 + 10] = p2.X;
-                vertices[i * 40 + 11] = p2.Y;
-                vertices[i * 40 + 12] = s.posZ;
-                            
-                vertices[i * 40 + 13] = s.texX + (float)s.currentFrame / (float)s.frames;
-                vertices[i * 40 + 14] = 0.0f;
-                            
-                vertices[i * 40 + 15] = s.color[0];
-                vertices[i * 40 + 16] = s.color[1];
-                vertices[i * 40 + 17] = s.color[2];
-                vertices[i * 40 + 18] = s.color[3];
-
-                vertices[i * 40 + 19] = s.texID;
-
-
-                vertices[i * 40 + 20] = p3.X;
-                vertices[i * 40 + 21] = p3.Y;
-                vertices[i * 40 + 22] = s.posZ;
-                             
-                vertices[i * 40 + 23] = (float)s.currentFrame / (float)s.frames;
-                vertices[i * 40 + 24] = 0.0f;
-                             
-                vertices[i * 40 + 25] = s.color[0];
-                vertices[i * 40 + 26] = s.color[1];
-                vertices[i * 40 + 27] = s.color[2];
-                vertices[i * 40 + 28] = s.color[3];
-
-                vertices[i * 40 + 29] = s.texID;
-
-
-                vertices[i * 40 + 30] = p4.X;
-                vertices[i * 40 + 31] = p4.Y;
-                vertices[i * 40 + 32] = s.posZ;
-                             
-                vertices[i * 40 + 33] = (float)s.currentFrame / (float)s.frames;
-                vertices[i * 40 + 34] = 1.0f;
-                             
-                vertices[i * 40 + 35] = s.color[0];
-                vertices[i * 40 + 36] = s.color[1];
-                vertices[i * 40 + 37] = s.color[2];
-                vertices[i * 40 + 38] = s.color[3];
-
-                vertices[i * 40 + 39] = s.texID;
+                vertices[i * 4 + 0] = new Vertex(p1.X, p1.Y, s.posZ, s.texX + (float)s.currentFrame / (float)s.frames, 1.0f,
+                                                s.color[0], s.color[1], s.color[2], s.color[3], s.texID);
+                vertices[i * 4 + 1] = new Vertex(p2.X, p2.Y, s.posZ, s.texX + (float)s.currentFrame / (float)s.frames, 0.0f,
+                                                s.color[0], s.color[1], s.color[2], s.color[3], s.texID);
+                vertices[i * 4 + 2] = new Vertex(p3.X, p3.Y, s.posZ, (float)s.currentFrame / (float)s.frames, 0.0f,
+                                                s.color[0], s.color[1], s.color[2], s.color[3], s.texID);
+                vertices[i * 4 + 3] = new Vertex(p4.X, p4.Y, s.posZ, (float)s.currentFrame / (float)s.frames, 1.0f,
+                                                s.color[0], s.color[1], s.color[2], s.color[3], s.texID);
             }
             return vertices;
         }
@@ -192,7 +153,7 @@ namespace Kee5Engine
 
             // Bind the vertex data to the buffer
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)0, _vertices.Length * sizeof(float), _vertices);
+            GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)0, _vertices.Length * (9 * sizeof(float) + sizeof(int)), _vertices);
 
             // Bind the vertex array
             GL.BindVertexArray(_vertexArrayObject);
@@ -227,7 +188,7 @@ namespace Kee5Engine
             if (!_texList.Contains(sprite.texture))
             {
                 _texList.Add(sprite.texture);
-                sprite.texID = (float)_texList.Count - 1;
+                sprite.texID = _texList.Count - 1;
             }
             
             // If it is not, let the sprite know which texture to use
@@ -314,19 +275,19 @@ namespace Kee5Engine
             // Let the shader know how to read the VBO
             var vertexLocation = _shader.GetAttribLocation("aPosition");
             GL.EnableVertexAttribArray(vertexLocation);
-            GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 10 * sizeof(float), 0);
+            GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 9 * sizeof(float) + sizeof(int), 0);
 
             var texCoordLocation = _shader.GetAttribLocation("aTexCoord");
             GL.EnableVertexAttribArray(texCoordLocation);
-            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 10 * sizeof(float), 3 * sizeof(float));
+            GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 9 * sizeof(float) + sizeof(int), 3 * sizeof(float));
 
             var colorLocation = _shader.GetAttribLocation("aColor");
             GL.EnableVertexAttribArray(colorLocation);
-            GL.VertexAttribPointer(colorLocation, 4, VertexAttribPointerType.Float, false, 10 * sizeof(float), 5 * sizeof(float));
+            GL.VertexAttribPointer(colorLocation, 4, VertexAttribPointerType.Float, false, 9 * sizeof(float) + sizeof(int), 5 * sizeof(float));
 
             var texIDLocation = _shader.GetAttribLocation("aTexID");
             GL.EnableVertexAttribArray(texIDLocation);
-            GL.VertexAttribPointer(texIDLocation, 1, VertexAttribPointerType.Float, false, 10 * sizeof(float), 9 * sizeof(float));
+            GL.VertexAttribIPointer(texIDLocation, 1, VertexAttribIntegerType.Int, 9 * sizeof(float) + sizeof(int), (IntPtr)(9 * sizeof(float)));
 
             // Create the EBO
             _elementBufferObject = GL.GenBuffer();

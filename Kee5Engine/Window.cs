@@ -184,11 +184,11 @@ namespace Kee5Engine
         /// <param name="e">Information about the click</param>
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            foreach (Button button in Globals.activeButtons)
+            for (int i = Globals.activeButtons.Count - 1; i >= 0; i--)
             {
-                if (button.IsInButton(MousePosition.X, MousePosition.Y))
+                if (Globals.activeButtons[i].IsInButton(MousePosition.X / screenScaleX, MousePosition.Y / screenScaleY))
                 {
-                    button.OnClick();
+                    Globals.activeButtons[i].OnClick();
                 }
             }
             base.OnMouseDown(e);

@@ -37,6 +37,12 @@ namespace Kee5Engine
         public void LoadTexture(string path, string name)
         {
             Texture texture = Texture.LoadFromFile(path, name);
+
+            // If the texture already exists, unload it first
+            if (_textures.ContainsKey(name))
+            {
+                GL.DeleteTexture(_textures[name].Handle);
+            }
             _textures[name] = texture;
         }
 
@@ -45,10 +51,17 @@ namespace Kee5Engine
         /// </summary>
         /// <param name="image">Bitmap</param>
         /// <param name="name">Name of the texture</param>
-        public void LoadTexture(Bitmap image, string name)
+        public Texture LoadTexture(Bitmap image, string name)
         {
             Texture texture = Texture.LoadFromBmp(image, name, false);
+            
+            // If the texture already exists, unload it first
+            if (_textures.ContainsKey(name))
+            {
+                GL.DeleteTexture(_textures[name].Handle);
+            }
             _textures[name] = texture;
+            return texture;
         }
 
         /// <summary>
@@ -72,6 +85,17 @@ namespace Kee5Engine
                 GL.DeleteTexture(texture.Handle);
                 Globals.unloaded++;
             }
+        }
+
+        /// <summary>
+        /// Check if a texture exists in the list
+        /// </summary>
+        /// <param name="name"><code>string</code> name of the texture</param>
+        /// <returns><code>true</code> if the texture exists</returns>
+        /// <returns><code>false</code> if the texture doesn't exist</returns>
+        public bool CheckIfTextureExists(string name)
+        {
+            return _textures.ContainsKey(name);
         }
     }
 }
