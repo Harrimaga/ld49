@@ -242,7 +242,7 @@ namespace Kee5Engine
             _maxIndicesCount = _maxQuadCount * 6;
 
             // Get the maximum textures for this GPU
-            _maxTextureCount = GL.GetInteger(GetPName.MaxTextureImageUnits);
+            _maxTextureCount = Math.Min(GL.GetInteger(GetPName.MaxTextureImageUnits), 32);
 
             _drawList = new List<Sprite>();
             _texList = new List<Texture>();

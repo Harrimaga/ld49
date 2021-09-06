@@ -163,7 +163,7 @@ namespace Kee5Engine
             camera.Update(args.Time);
 
             // Check if the Escape button is pressed
-            if (inputHandler.IsKeyDown(Keys.Escape))
+            if (inputHandler.IsKeyPressed(Keys.Escape))
             {
                 // Close the window
                 Close();
