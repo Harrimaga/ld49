@@ -27,6 +27,9 @@ namespace Kee5Engine
             LoadTexture("Sprites/Test/Test.png", "Test");
             LoadTexture("Sprites/Test/Pixel.png", "Pixel");
             LoadTexture("Sprites/Test/PlayerIdle.png", "PlayerIdle");
+
+            LoadTexture("Sprites/Tiles/IceTiles.png", "IceTile");
+            LoadTexture("Sprites/Tiles/BasicWall.png", "BasicSolid");
         }
 
         /// <summary>

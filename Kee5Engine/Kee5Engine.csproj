@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <None Remove="freetype6.dll" />
+    <None Remove="Logic\NewFile1.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +54,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Fonts\ariblk.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Logic\Levels\Levels\TestLevel.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Logic\Levels\Levels\Tut1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Shaders\fs.glsl">
@@ -94,11 +101,18 @@
     <None Update="Sprites\Test\Test.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Sprites\Tiles\BasicWall.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sprites\Tiles\IceTiles.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Audio\Music\" />
     <Folder Include="Audio\SFX\" />
+    <Folder Include="Sprites\Tiles\" />
   </ItemGroup>
 
 </Project>

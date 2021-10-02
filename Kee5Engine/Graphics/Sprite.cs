@@ -29,7 +29,7 @@ namespace Kee5Engine
         /// <param name="frames">Total frames in the spritesheet</param>
         /// <param name="animationTime">Time in seconds per frame</param>
         /// <param name="texID">ID of the texture in the batch</param>
-        public Sprite(Texture texture, float width, float height, float posX, float posY, float posZ, float rotation, Vector4 color, int frames = 1, double animationTime = 1, int texID = 0)
+        public Sprite(Texture texture, float width, float height, float posX, float posY, float posZ, float rotation, Vector4 color, int frames = 1, double animationTime = 1, int texID = 0, int frame = 0)
         {
             this.texture = texture;
             this.width = width;
@@ -44,7 +44,7 @@ namespace Kee5Engine
             _animationTime = animationTime;
 
             texX = 1.0f / frames;
-            currentFrame = 0;
+            currentFrame = frame;
         }
 
         /// <summary>
@@ -61,6 +61,7 @@ namespace Kee5Engine
         /// <param name="deltaTime"></param>
         public virtual void Update(double deltaTime)
         {
+            if (_animationTime == 0) return;
             // If the time passed since last frame > time per frame, go to the next frame
             _timePassed += deltaTime;
             if (_timePassed > _animationTime)

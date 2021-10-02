@@ -119,25 +119,29 @@ namespace Kee5Engine
         /// <param name="deltaTime">Time passed since last update call</param>
         public void Update(double deltaTime)
         {
-            if (Window.inputHandler.IsKeyDown(Keys.W))
+            if (Globals.gameState == GameState.PLAYING)
             {
-                Position -= Up * Speed * (float)deltaTime;
+                Position = new Vector3(Globals.level.GetPlayerPos().X - Window.WindowSize.X / 2, Globals.level.GetPlayerPos().Y - Window.WindowSize.Y / 2, Position.Z);
             }
+            //if (Window.inputHandler.IsKeyDown(Keys.W))
+            //{
+            //    Position -= Up * Speed * (float)deltaTime;
+            //}
 
-            if (Window.inputHandler.IsKeyDown(Keys.S))
-            {
-                Position += Up * Speed * (float)deltaTime;
-            }
+            //if (Window.inputHandler.IsKeyDown(Keys.S))
+            //{
+            //    Position += Up * Speed * (float)deltaTime;
+            //}
 
-            if (Window.inputHandler.IsKeyDown(Keys.A))
-            {
-                Position -= Right * Speed * (float)deltaTime;
-            }
+            //if (Window.inputHandler.IsKeyDown(Keys.A))
+            //{
+            //    Position -= Right * Speed * (float)deltaTime;
+            //}
 
-            if (Window.inputHandler.IsKeyDown(Keys.D))
-            {
-                Position += Right * Speed * (float)deltaTime;
-            }
+            //if (Window.inputHandler.IsKeyDown(Keys.D))
+            //{
+            //    Position += Right * Speed * (float)deltaTime;
+            //}
         }
     }
 }

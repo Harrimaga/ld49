@@ -82,8 +82,8 @@ namespace Kee5Engine
 
             // Set wrapping mode, this is how the texture wraps
             // S is for X axis, T is for Y axis
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
 
             // Generate mipmaps
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);

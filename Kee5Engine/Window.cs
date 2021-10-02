@@ -28,7 +28,6 @@ namespace Kee5Engine
         public static int drawCalls = 0, spritesDrawn = 0;
         public static Vector2 WindowSize { get; private set; }
         public static TextRenderer2D textRenderer;
-        private Sprite _player, _backGround;
 
         /// <summary>
         /// Create an OpenGL GameWindow
@@ -90,12 +89,9 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
-            // Create 2 test Sprites, 1 animated one, 1 non animated one
-            _player = new Sprite(textures.GetTexture("PlayerIdle"), 128, 128, 960, 540, 1f, 0, Vector4.One, 4, 0.1);
-            _backGround = new Sprite(textures.GetTexture("Test"), 1920, 1080, 960, 540, -1f, 0, Vector4.One);
-
-            // Create a test button
-            Globals.activeButtons.Add(new Button(200, 980, 400, 200, 2, "Test", "Button", new Vector4(0.2f, 0, 0, 1), Vector3.One, TextAlignment.CENTER, true, () => { Console.WriteLine("Clicked!"); }));
+            Globals.mainMenu = new MainMenu();
+            Globals.levelsUnlocked = 2;
+            Globals.gameState = GameState.MENU;
 
             base.OnLoad();
         }
@@ -121,10 +117,6 @@ namespace Kee5Engine
             _shader.SetMatrix4("view", camera.GetViewMatrix());
             _shader.SetMatrix4("projection", camera.GetProjectionMatrix());
 
-            // Draw Sprites:
-            _backGround.Draw();
-            _player.Draw();
-
             // Call Globals' draw method. This Draws all active buttons
             Globals.Draw();
 
@@ -149,6 +141,8 @@ namespace Kee5Engine
             // Increment the total elapsed time
             timeElapsed += args.Time;
 
+            Globals.deltaTime = args.Time;
+
             // Return if the window isn't focussed
             // If running with break points, disable this, or this will always return
             if (!IsFocused)
@@ -159,6 +153,9 @@ namespace Kee5Engine
             // Update the InputHandler
             inputHandler.Update(KeyboardState.GetSnapshot(), MouseState.GetSnapshot());
 
+            // Call Globals' update, this updates the active Buttons as well as the AudioManager
+            Globals.Update();
+
             // Update the Camera
             camera.Update(args.Time);
 
@@ -168,12 +165,6 @@ namespace Kee5Engine
                 // Close the window
                 Close();
             }
-
-            // Update a Sprite
-            _player.Update(args.Time);
-
-            // Call Globals' update, this updates the active Buttons as well as the AudioManager
-            Globals.Update();
 
             base.OnUpdateFrame(args);
         }
@@ -186,6 +177,10 @@ namespace Kee5Engine
         {
             for (int i = Globals.activeButtons.Count - 1; i >= 0; i--)
             {
+                if (Globals.activeButtons.Count == 0)
+                {
+                    return;
+                }
                 if (Globals.activeButtons[i].IsInButton(MousePosition.X / screenScaleX, MousePosition.Y / screenScaleY))
                 {
                     Globals.activeButtons[i].OnClick();
