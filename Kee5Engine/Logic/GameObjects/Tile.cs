@@ -74,7 +74,7 @@ namespace Kee5Engine
 
         public override void Update()
         {
-            if (CollidesEnd(Globals.level.GetPlayerPos(), Globals.level.GetPlayerSize()) && Window.inputHandler.IsKeyPressed(Keys.E) && Globals.level.CanEnd())
+            if (CollidesEnd(Globals.level.GetPlayerPos(), Globals.level.GetPlayerSize()) && (Window.inputHandler.IsKeyPressed(Keys.E) || Window.inputHandler.IsButtonPressed(IO.ControllerKeys.Y)) && Globals.level.CanEnd())
             {
                 // End level
                 Globals.gameState = GameState.MENU;

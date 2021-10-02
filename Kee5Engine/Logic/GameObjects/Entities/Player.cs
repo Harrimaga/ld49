@@ -1,4 +1,5 @@
-﻿using OpenTK.Mathematics;
+﻿using Kee5Engine.IO;
+using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
@@ -106,26 +107,26 @@ namespace Kee5Engine
                 return;
             }
 
-            if ((Window.inputHandler.IsKeyPressed(Keys.Space) || Window.inputHandler.IsButtonPressed(0)) && onGround)
+            if ((Window.inputHandler.IsKeyPressed(Keys.Space) || Window.inputHandler.IsButtonPressed(ControllerKeys.A)) && onGround)
             {
                 velocity.Y = -Balance.jumpSpeed;
             }
-            else if (Window.inputHandler.IsKeyPressed(Keys.Space) && !doubleJumped)
+            else if ((Window.inputHandler.IsKeyPressed(Keys.Space) || Window.inputHandler.IsButtonPressed(ControllerKeys.A)) && !doubleJumped)
             {
                 velocity.Y = -Balance.jumpSpeed;
                 doubleJumped = true;
             }
 
-            if (Window.inputHandler.IsKeyDown(Keys.Space) && velocity.Y < 0)
+            if ((Window.inputHandler.IsKeyDown(Keys.Space) || Window.inputHandler.IsButtonPressed(ControllerKeys.A)) && velocity.Y < 0)
             {
                 velocity.Y -= Balance.gravity * 0.35f * (float)Globals.deltaTime;
             }
 
-            if (Window.inputHandler.IsKeyDown(Keys.D) || Window.inputHandler.IsKeyDown(Keys.Right))
+            if (Window.inputHandler.IsKeyDown(Keys.D) || Window.inputHandler.IsKeyDown(Keys.Right) || Window.inputHandler.IsLeftStickAngle(ControllerAngle.RIGHT))
             {
                 velocity.X = (float)Math.Min(velocity.X + Balance.speed * Globals.deltaTime * (1 + 2 * (Balance.maxSpeed - velocity.X) / Balance.maxSpeed), Balance.maxSpeed);
             }
-            else if (Window.inputHandler.IsKeyDown(Keys.A) || Window.inputHandler.IsKeyDown(Keys.Left))
+            else if (Window.inputHandler.IsKeyDown(Keys.A) || Window.inputHandler.IsKeyDown(Keys.Left) || Window.inputHandler.IsLeftStickAngle(ControllerAngle.LEFT))
             {
                 velocity.X = (float)Math.Max(velocity.X - Balance.speed * Globals.deltaTime * (1 + 2 * (Balance.maxSpeed + velocity.X) / Balance.maxSpeed), -Balance.maxSpeed);
 
@@ -143,7 +144,7 @@ namespace Kee5Engine
                 }
             }
 
-            if (velocity != Vector2.Zero && Window.inputHandler.IsKeyPressed(Keys.LeftShift) && canDash)
+            if (velocity != Vector2.Zero && (Window.inputHandler.IsKeyPressed(Keys.LeftShift) || Window.inputHandler.IsButtonPressed(ControllerKeys.B)) && canDash)
             {
                 velocity = Vector2.NormalizeFast(velocity) * Balance.dashSpeed;
 

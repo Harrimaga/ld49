@@ -8,7 +8,7 @@ using OpenTK.Input;
 namespace Kee5Engine.IO
 {
 
-    public enum controllerKeys
+    public enum ControllerKeys
     {
         A = 0,
         B = 1,
@@ -16,11 +16,24 @@ namespace Kee5Engine.IO
         Y = 3,
         L = 4,
         R = 5,
-        LT = 6,
-        RT = 7,
+        SELECT = 6,
+        START = 7,
         LEFT_ANALOG = 8,
-        RIGHT_ANALOG = 9
+        RIGHT_ANALOG = 9,
+        UP = 10,
+        RIGHT = 11,
+        DOWN = 12,
+        LEFT = 13
     }
+
+    public enum ControllerAngle
+    {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN
+    }
+
     public class InputHandler
     {
         private KeyboardState state, prevstate;
@@ -36,13 +49,8 @@ namespace Kee5Engine.IO
             mState = mstate;
             jState = jstate;
 
-            for (int i = 0; i < 13; i++)
-            {
-                if (IsButtonDown(i))
-                {
-                    Console.WriteLine(i);
-                }
-            }
+            //Console.WriteLine($"{IsLeftStickAngle(ControllerAngle.UP)} {IsLeftStickAngle(ControllerAngle.DOWN)} {IsLeftStickAngle(ControllerAngle.LEFT)} {IsLeftStickAngle(ControllerAngle.RIGHT)}");
+            //Console.WriteLine($"({jState.GetAxis(0)}, {jState.GetAxis(1)})");
         }
 
         public bool IsKeyDown(Keys key)
@@ -50,9 +58,9 @@ namespace Kee5Engine.IO
             return state.IsKeyDown(key);
         }
 
-        public bool IsButtonDown(int key)
+        public bool IsButtonDown(ControllerKeys key)
         {
-            return jState.IsButtonDown(key);
+            return jState.IsButtonDown((int)key);
         }
 
         public bool IsKeyPressed(Keys key)
@@ -60,9 +68,9 @@ namespace Kee5Engine.IO
             return state.IsKeyDown(key) && !prevstate.IsKeyDown(key);
         }
 
-        public bool IsButtonPressed(int key)
+        public bool IsButtonPressed(ControllerKeys key)
         {
-            return jState.IsButtonDown(key) && !prevjstate.IsButtonDown(key);
+            return jState.IsButtonDown((int)key) && !prevjstate.IsButtonDown((int)key);
         }
 
         public bool IsKeyReleased(Keys key)
@@ -70,9 +78,38 @@ namespace Kee5Engine.IO
             return state.IsKeyReleased(key);
         }
 
-        public bool IsButtonReleased(int key)
+        public bool IsButtonReleased(ControllerKeys key)
         {
-            return !jState.IsButtonDown(key) && prevjstate.IsButtonDown(key);
+            return !jState.IsButtonDown((int)key) && prevjstate.IsButtonDown((int)key);
+        }
+
+        public bool IsLeftStickAngle(ControllerAngle angle)
+        {
+            if (jState.GetAxis(0) > 0.2f)
+            {
+                if (jState.GetAxis(1) > jState.GetAxis(0))
+                {
+                    return angle == ControllerAngle.DOWN;
+                }
+                return angle == ControllerAngle.RIGHT;
+            }
+            else if (jState.GetAxis(0) < -0.2f)
+            {
+                if (jState.GetAxis(1) < jState.GetAxis(0))
+                {
+                    return angle == ControllerAngle.UP;
+                }
+                return angle == ControllerAngle.LEFT;
+            }
+            else if (jState.GetAxis(1) > 0.2f)
+            {
+                return angle == ControllerAngle.DOWN;
+            }
+            else if (jState.GetAxis(1) < -0.2f)
+            {
+                return angle == ControllerAngle.UP;
+            }
+            return false;
         }
 
         public bool IsAnyKeyDown()
