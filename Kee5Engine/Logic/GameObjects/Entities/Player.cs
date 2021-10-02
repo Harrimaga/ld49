@@ -27,7 +27,8 @@ namespace Kee5Engine
         public void Update()
         {
             position.Y += 1;
-            onGround = Globals.level.CollidesWithMap(this, out Tile collission);
+            onGround = Globals.level.CollidesWithMap(this, out _);
+            Tile collission = Globals.level.GetTileBelow(position, size);
             
             if (collission is SpikeTile)
             {
@@ -99,12 +100,13 @@ namespace Kee5Engine
                 if (dashTimer <= 0)
                 {
                     velocity.Y = Math.Max(velocity.Y, -Balance.maxSpeed);
+                    velocity.X = Math.Clamp(velocity.X, -Balance.maxSpeed, Balance.maxSpeed);
                 }
 
                 return;
             }
 
-            if (Window.inputHandler.IsKeyPressed(Keys.Space) && onGround)
+            if ((Window.inputHandler.IsKeyPressed(Keys.Space) || Window.inputHandler.IsButtonPressed(0)) && onGround)
             {
                 velocity.Y = -Balance.jumpSpeed;
             }
@@ -117,14 +119,6 @@ namespace Kee5Engine
             if (Window.inputHandler.IsKeyDown(Keys.Space) && velocity.Y < 0)
             {
                 velocity.Y -= Balance.gravity * 0.35f * (float)Globals.deltaTime;
-            }
-
-            if (velocity != Vector2.Zero && Window.inputHandler.IsKeyPressed(Keys.LeftShift) && canDash)
-            {
-                velocity = Vector2.NormalizeFast(velocity) * Balance.dashSpeed;
-
-                dashTimer = Balance.dashTime;
-                canDash = false;
             }
 
             if (Window.inputHandler.IsKeyDown(Keys.D) || Window.inputHandler.IsKeyDown(Keys.Right))
@@ -147,6 +141,14 @@ namespace Kee5Engine
                 {
                     velocity.X = 0;
                 }
+            }
+
+            if (velocity != Vector2.Zero && Window.inputHandler.IsKeyPressed(Keys.LeftShift) && canDash)
+            {
+                velocity = Vector2.NormalizeFast(velocity) * Balance.dashSpeed;
+
+                dashTimer = Balance.dashTime;
+                canDash = false;
             }
         }
     }

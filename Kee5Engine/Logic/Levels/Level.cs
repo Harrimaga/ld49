@@ -15,11 +15,13 @@ namespace Kee5Engine
         private int collectablesNeeded;
 
         private Sprite background;
+        private double time;
 
         public Level()
         {
             LoadLevel($"Logic/Levels/Levels/{Balance.levels[Globals.currentLevel]}.txt");
             removables = new List<Tile>();
+            time = 0;
             tileDeathPlane = (grid.GetLength(1) + 10) * Globals.tileSize;
             entityDeathPlane = (grid.GetLength(1) + 10) * Globals.tileSize;
             background = new Sprite(Window.textures.GetTexture("Pixel"), Window.WindowSize.X, Window.WindowSize.Y, Window.WindowSize.X / 2, Window.WindowSize.Y / 2, 0, 0, new Vector4(0.61f, 0.84f, 0.87f, 1));
@@ -54,6 +56,24 @@ namespace Kee5Engine
             return collectablesNeeded <= 0;
         }
 
+        public double GetTime()
+        {
+            return time;
+        }
+
+        public Tile GetTileBelow(Vector2 position, Vector2 size)
+        {
+            Vector2 tile = position + new Vector2(0, size.Y + 1);
+            int i = (int)Math.Round(tile.X / Globals.tileSize);
+            int j = (int)Math.Floor(tile.Y / Globals.tileSize);
+
+            if (i >= 0 && i < grid.GetLength(0) && j >= 0 && j < grid.GetLength(1))
+            {
+                return grid[i, j];
+            }
+
+            return null;
+        }
 
         public void LoadLevel(string path)
         {
@@ -136,6 +156,7 @@ namespace Kee5Engine
 
         public void Update()
         {
+            time += Globals.deltaTime;
             for (int x = 0; x < grid.GetLength(0); x++)
             {
                 for (int y = 0; y < grid.GetLength(1); y++)

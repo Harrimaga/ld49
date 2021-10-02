@@ -90,7 +90,7 @@ namespace Kee5Engine
             CursorGrabbed = false;
 
             Globals.mainMenu = new MainMenu();
-            Globals.levelsUnlocked = 2;
+            Globals.levelsUnlocked = 3;
             Globals.gameState = GameState.MENU;
 
             base.OnLoad();
@@ -151,7 +151,7 @@ namespace Kee5Engine
             }
 
             // Update the InputHandler
-            inputHandler.Update(KeyboardState.GetSnapshot(), MouseState.GetSnapshot());
+            inputHandler.Update(KeyboardState.GetSnapshot(), MouseState.GetSnapshot(), JoystickStates[0].GetSnapshot());
 
             // Call Globals' update, this updates the active Buttons as well as the AudioManager
             Globals.Update();

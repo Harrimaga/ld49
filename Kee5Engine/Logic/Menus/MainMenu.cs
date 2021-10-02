@@ -26,9 +26,19 @@ namespace Kee5Engine
         }
 
 
-        public void OpenLevelSelect()
+        public void OpenLevelSelect(double time = 0)
         {
             Globals.activeButtons.Clear();
+
+            if (time > 0)
+            {
+                TimeSpan ts = TimeSpan.FromSeconds(time);
+                string timestring = ts.ToString(@"h\:mm\:ss\.FFF");
+
+                Globals.activeButtons.Add(
+                    new Button(Window.WindowSize.X / 2, 200, 300, 150, 2, timestring, Vector3.One, TextAlignment.CENTER, true, () => { })
+                    );
+            }
 
             for (int i = 0; i < Globals.levelsUnlocked; i++)
             {

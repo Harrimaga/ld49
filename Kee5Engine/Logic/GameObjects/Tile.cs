@@ -79,7 +79,7 @@ namespace Kee5Engine
                 // End level
                 Globals.gameState = GameState.MENU;
                 Globals.levelsUnlocked = Math.Max(Math.Min(Balance.levels.Length, Globals.currentLevel + 2), Globals.levelsUnlocked);
-                Globals.mainMenu.OpenLevelSelect();
+                Globals.mainMenu.OpenLevelSelect(Globals.level.GetTime());
             }
         }
     }
