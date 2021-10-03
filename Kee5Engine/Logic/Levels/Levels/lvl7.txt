@@ -12,6 +12,6 @@ H                                                           H
 H                                                           H
 H                                                           H
 H                                                           H
-H                             1                             H
-H  C                          0                          C  H
+H  R                          1                          L  H
+H  C                       L  0  R                       C  H
 H ##       ##       ##       SSS       ##       ##       ## H
