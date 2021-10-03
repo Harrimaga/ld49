@@ -31,6 +31,8 @@ namespace Kee5Engine
         public static GameState gameState;
         public static int currentLevel;
         public static int levelsUnlocked;
+        public static int deathCount;
+        public static List<TimeSpan> records;
 
         public static int unloaded;
 
@@ -125,6 +127,7 @@ namespace Kee5Engine
                     {
                         Window.spriteRenderer.DrawSprite(mainMenu.levelTime, new Vector2(Window.WindowSize.X / 2, 200) + Window.camera.Position.Xy, new Vector2(mainMenu.levelTime.Size.X, mainMenu.levelTime.Size.Y), 2, 0, Vector4.One);
                     }
+                    mainMenu.Draw();
                     break;
                 case GameState.LOST:
                     break;

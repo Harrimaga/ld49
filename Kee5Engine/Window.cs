@@ -12,6 +12,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using Kee5Engine.IO;
 using Kee5Engine.Shaders;
 using Kee5Engine.Audio;
+using System.IO;
 
 namespace Kee5Engine
 {
@@ -89,9 +90,11 @@ namespace Kee5Engine
             // Remove mouse from screen :)
             CursorGrabbed = false;
 
+            Globals.records = new List<TimeSpan>();
+            LoadSave();
+
             Globals.mainMenu = new MainMenu();
             Globals.mainMenu.isFullScreen = IsFullscreen;
-            Globals.levelsUnlocked = 12;
             Globals.gameState = GameState.MENU;
 
             base.OnLoad();
@@ -234,6 +237,60 @@ namespace Kee5Engine
             Console.WriteLine($"{Globals.unloaded} textures unloaded");
 
             base.OnUnload();
+        }
+
+        private void LoadSave()
+        {
+            string path = "SaveFile.txt";
+
+            string line;
+            if (!File.Exists(path))
+            {
+                for (int i = 0; i < Balance.levels.Length; i++)
+                {
+                    Globals.records.Add(TimeSpan.FromDays(2));
+                }
+                Globals.levelsUnlocked = 1;
+                WriteSave();
+                return;
+            }
+            // Read the file and display it line by line.  
+            System.IO.StreamReader file =
+                new System.IO.StreamReader(path);
+
+            Globals.levelsUnlocked = int.Parse(file.ReadLine());
+            Globals.deathCount = int.Parse(file.ReadLine());
+
+            while ((line = file.ReadLine()) != null)
+            {
+                if (line == "-1")
+                {
+                    Globals.records.Add(TimeSpan.FromDays(2));
+                }
+                else
+                {
+                    Globals.records.Add(TimeSpan.Parse(line));
+                }
+            }
+
+            file.Close();
+        }
+
+        public static void WriteSave()
+        {
+            string path = "SaveFile.txt";
+
+            StreamWriter file = new System.IO.StreamWriter(path, false);
+            file.WriteLine(Globals.levelsUnlocked.ToString());
+            file.WriteLine(Globals.deathCount.ToString());
+
+            for (int i = 0; i < Globals.records.Count; i++)
+            {
+                file.WriteLine(Globals.records[i].ToString());
+            }
+
+            file.Close();
+
         }
     }
 }

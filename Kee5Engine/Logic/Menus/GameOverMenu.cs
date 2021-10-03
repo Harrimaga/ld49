@@ -13,7 +13,7 @@ namespace Kee5Engine
         {
             Game.gameWindow.CursorVisible = true;
             Globals.activeButtons.Clear();
-            restart = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2, 250, 50, 1, "Pixel", $"Restart Level {Globals.currentLevel + 1}", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { Restartlevel(); });
+            restart = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2, 250, 50, 1, "Pixel", $"Restart {Balance.levelNames[Globals.currentLevel]}", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { Restartlevel(); });
             backToMenu = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 70, 250, 50, 1, "Pixel", "Main Menu", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { GoToMainMenu(); });
             Globals.activeButtons.Add(restart);
             Globals.activeButtons.Add(backToMenu);

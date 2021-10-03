@@ -90,6 +90,8 @@ namespace Kee5Engine
         {
             Globals.gameState = GameState.LOST;
             Globals.gameOverMenu = new GameOverMenu();
+            Globals.deathCount++;
+            Window.WriteSave();
         }
 
         public void InputHandling()
@@ -99,6 +101,8 @@ namespace Kee5Engine
                 Globals.activeButtons.Clear();
                 Globals.level = new Level();
                 Globals.gameState = GameState.PLAYING;
+                Globals.deathCount++;
+                Window.WriteSave();
             }
 
             if (Window.inputHandler.IsKeyPressed(Keys.Escape) || Window.inputHandler.IsButtonPressed(ControllerKeys.START))

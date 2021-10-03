@@ -12,6 +12,8 @@ namespace Kee5Engine
         public bool isFullScreen;
         public Texture levelTime;
         public List<Button> levels, activeLevelButtons;
+        public List<Sprite> records;
+        public Sprite deathCount;
         public int currentLevelList;
 
         private int levelsPerList = 5, buttonWidth = 260;
@@ -19,6 +21,7 @@ namespace Kee5Engine
         public MainMenu()
         {
             Game.gameWindow.CursorVisible = true;
+            Window.camera.Position = new Vector3(0, 0, 10);
             Globals.activeButtons.Clear();
             start = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2, buttonWidth, 50, 1, "Pixel", "Start Game", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { StartGame(); });
             selectLevel = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 60, buttonWidth, 50, 1, "Pixel", "Select Level", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { OpenLevelSelect(); });
@@ -28,11 +31,16 @@ namespace Kee5Engine
 
             levels = new List<Button>();
             activeLevelButtons = new List<Button>();
+            records = new List<Sprite>();
             currentLevelList = 0;
             Globals.activeButtons.Add(start);
             Globals.activeButtons.Add(selectLevel);
             Globals.activeButtons.Add(fullScreen);
             Globals.activeButtons.Add(quit);
+
+            Texture deathCountText = Texture.LoadFromBmp(Window.textRenderer.RenderString($"Total Deaths: {Globals.deathCount}", Color.White), "DeathCountText", false);
+
+            deathCount = new Sprite(deathCountText, deathCountText.Size.X, deathCountText.Size.Y, Window.WindowSize.X / 2, Window.WindowSize.Y - 200, 7, 0, Vector4.One);
 
             Globals.ActivateButtons();
         }
@@ -74,6 +82,8 @@ namespace Kee5Engine
                 return;
             }
 
+            records.Clear();
+
             foreach (Button button in activeLevelButtons)
             {
                 Globals.activeButtons.Remove(button);
@@ -86,9 +96,20 @@ namespace Kee5Engine
                     return;
                 }
                 int level = i * levelsPerList + j;
-                Button btn = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 60 * j, 200, 50, 1, "Pixel", Balance.levels[level], Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { StartGame(level); });
+                Button btn = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 60 * j, 200, 50, 1, "Pixel", Balance.levelNames[level], Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { StartGame(level); });
                 Globals.activeButtons.Add(btn);
                 activeLevelButtons.Add(btn);
+
+                TimeSpan time = Globals.records[level];
+
+                if (time.Days != 2)
+                {
+                    string timeString = time.ToString(@"h\:mm\:ss\.FFF");
+                    Texture t = Texture.LoadFromBmp(Window.textRenderer.RenderString(timeString, Color.White), $"RecordLvl{level}", false);
+                    records.Add(
+                        new Sprite(t, t.Size.X, t.Size.Y, btn.posX + 300, btn.posY, btn.layer, 0, Vector4.One)
+                        );
+                }
             }
         }
 
@@ -130,6 +151,16 @@ namespace Kee5Engine
             LevelList(0);
 
             Globals.ActivateButtons();
+        }
+
+        public void Draw()
+        {
+            Window.camera.Position = new Vector3(0, 0, 10);
+            foreach (Sprite sprite in records)
+            {
+                sprite.Draw();
+            }
+            deathCount.Draw();
         }
     }
 }
