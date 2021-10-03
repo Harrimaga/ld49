@@ -90,7 +90,8 @@ namespace Kee5Engine
             CursorGrabbed = false;
 
             Globals.mainMenu = new MainMenu();
-            Globals.levelsUnlocked = 3;
+            Globals.mainMenu.isFullScreen = IsFullscreen;
+            Globals.levelsUnlocked = 4;
             Globals.gameState = GameState.MENU;
 
             base.OnLoad();
@@ -164,11 +165,11 @@ namespace Kee5Engine
             camera.Update(args.Time);
 
             // Check if the Escape button is pressed
-            if (inputHandler.IsKeyPressed(Keys.Escape))
-            {
-                // Close the window
-                Close();
-            }
+            //if (inputHandler.IsKeyPressed(Keys.Escape))
+            //{
+            //    // Close the window
+            //    Close();
+            //}
 
             base.OnUpdateFrame(args);
         }

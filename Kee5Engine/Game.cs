@@ -8,7 +8,7 @@ namespace Kee5Engine
 {
     public class Game
     {
-        private Window gameWindow;
+        public static Window gameWindow;
 
         /// <summary>
         /// Initiate new Game

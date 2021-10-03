@@ -15,6 +15,8 @@ namespace Kee5Engine
             backToMenu = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 70, 250, 50, 1, "Pixel", "Main Menu", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { GoToMainMenu(); });
             Globals.activeButtons.Add(restart);
             Globals.activeButtons.Add(backToMenu);
+
+            Globals.ActivateButtons();
         }
 
         public void Restartlevel()

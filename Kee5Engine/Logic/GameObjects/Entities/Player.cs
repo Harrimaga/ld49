@@ -94,12 +94,19 @@ namespace Kee5Engine
 
         public void InputHandling()
         {
-            if (Window.inputHandler.IsKeyPressed(Keys.R))
+            if (Window.inputHandler.IsKeyPressed(Keys.R) || Window.inputHandler.IsButtonPressed(ControllerKeys.SELECT))
             {
                 Globals.level = new Level();
                 Globals.activeButtons.Clear();
                 Globals.gameState = GameState.PLAYING;
             }
+
+            if (Window.inputHandler.IsKeyPressed(Keys.Escape) || Window.inputHandler.IsButtonPressed(ControllerKeys.START))
+            {
+                Globals.mainMenu = new MainMenu();
+                Globals.gameState = GameState.MENU;
+            }
+
             if (dashTimer > 0)
             {
                 dashTimer -= Globals.deltaTime;

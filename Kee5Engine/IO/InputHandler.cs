@@ -112,6 +112,40 @@ namespace Kee5Engine.IO
             return false;
         }
 
+        private bool IsPrevLeftStickAngle(ControllerAngle angle)
+        {
+            if (prevjstate.GetAxis(0) > 0.2f)
+            {
+                if (prevjstate.GetAxis(1) > prevjstate.GetAxis(0))
+                {
+                    return angle == ControllerAngle.DOWN;
+                }
+                return angle == ControllerAngle.RIGHT;
+            }
+            else if (prevjstate.GetAxis(0) < -0.2f)
+            {
+                if (prevjstate.GetAxis(1) < prevjstate.GetAxis(0))
+                {
+                    return angle == ControllerAngle.UP;
+                }
+                return angle == ControllerAngle.LEFT;
+            }
+            else if (prevjstate.GetAxis(1) > 0.2f)
+            {
+                return angle == ControllerAngle.DOWN;
+            }
+            else if (prevjstate.GetAxis(1) < -0.2f)
+            {
+                return angle == ControllerAngle.UP;
+            }
+            return false;
+        }
+
+        public bool IsLeftStickAngleChanged(ControllerAngle angle)
+        {
+            return IsLeftStickAngle(angle) && !IsPrevLeftStickAngle(angle);
+        }
+
         public bool IsAnyKeyDown()
         {
             return state.IsAnyKeyDown;
