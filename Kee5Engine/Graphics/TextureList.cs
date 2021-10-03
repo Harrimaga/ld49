@@ -29,6 +29,10 @@ namespace Kee5Engine
             LoadTexture("Sprites/Test/Pixel.png", "Pixel");
             LoadTexture("Sprites/Test/PlayerIdle.png", "PlayerIdle");
 
+            // Others
+            LoadTexture("Sprites/Tiles/End.png", "EndTile");
+            LoadTexture("Sprites/Tiles/Key.png", "KeyTile");
+
             // Tiles
             LoadTexture("Sprites/Tiles/IceTiles.png", "IceTile");
             LoadTexture("Sprites/Tiles/SafeTile.png", "SafeTile");
@@ -41,6 +45,9 @@ namespace Kee5Engine
             LoadTexture("Sprites/Background/Background3.png", "Background3");
             LoadTexture("Sprites/Background/Background4.png", "Background4");
             LoadTexture("Sprites/Background/Background5.png", "Background5");
+
+            // Player
+            LoadTexture("Sprites/Player.png", "Player");
         }
 
         /// <summary>

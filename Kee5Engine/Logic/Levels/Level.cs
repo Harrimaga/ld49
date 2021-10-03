@@ -105,7 +105,7 @@ namespace Kee5Engine
                             break;
                         case '0':
                             grid[x, y] = null;
-                            player = new Player(new Vector2(Globals.tileSize * x, Globals.tileSize * y), Window.textures.GetTexture("PlayerIdle"));
+                            player = new Player(new Vector2(Globals.tileSize * x, Globals.tileSize * y), Window.textures.GetTexture("Player"));
                             break;
                         case '1':
                             grid[x, y] = new LevelEndTile(new Vector2(x * Globals.tileSize, y * Globals.tileSize));
