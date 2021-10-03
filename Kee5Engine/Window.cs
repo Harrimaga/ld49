@@ -91,7 +91,7 @@ namespace Kee5Engine
 
             Globals.mainMenu = new MainMenu();
             Globals.mainMenu.isFullScreen = IsFullscreen;
-            Globals.levelsUnlocked = 10;
+            Globals.levelsUnlocked = 11;
             Globals.gameState = GameState.MENU;
 
             base.OnLoad();
@@ -189,6 +189,7 @@ namespace Kee5Engine
                     return;
                 }
             }
+
             base.OnMouseDown(e);
         }
 

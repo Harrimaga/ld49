@@ -83,6 +83,9 @@
     <None Update="Logic\Levels\Levels\lvl8.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Logic\Levels\Levels\lvl9.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Logic\Levels\Levels\TestLevel.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -18,6 +18,7 @@ namespace Kee5Engine
 
         public MainMenu()
         {
+            Game.gameWindow.CursorVisible = true;
             Globals.activeButtons.Clear();
             start = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2, buttonWidth, 50, 1, "Pixel", "Start Game", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { StartGame(); });
             selectLevel = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 60, buttonWidth, 50, 1, "Pixel", "Select Level", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { OpenLevelSelect(); });
@@ -38,6 +39,7 @@ namespace Kee5Engine
 
         public void StartGame(int i = 0)
         {
+            Game.gameWindow.CursorVisible = false;
             Globals.currentLevel = i;
             Globals.activeButtons.Clear();
             Globals.level = new Level();
@@ -93,16 +95,8 @@ namespace Kee5Engine
 
         public void OpenLevelSelect(double time = 0)
         {
+            Game.gameWindow.CursorVisible = true;
             Globals.activeButtons.Clear();
-
-            if (time > 0)
-            {
-                TimeSpan ts = TimeSpan.FromSeconds(time);
-                string timestring = ts.ToString(@"h\:mm\:ss\.FFF");
-
-                Window.textRenderer.SetSize(128);
-                levelTime = Texture.LoadFromBmp(Window.textRenderer.RenderString(timestring, Color.White), "levelTime", false);
-            }
 
             Globals.activeButtons.Add(
                 new Button(Window.WindowSize.X / 2, 300, 200, 50, 1, "Pixel", "Main Menu", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => {
@@ -111,6 +105,19 @@ namespace Kee5Engine
                     Globals.mainMenu = new MainMenu();
                 })
                 );
+
+            if (time > 0)
+            {
+                TimeSpan ts = TimeSpan.FromSeconds(time);
+                string timestring = ts.ToString(@"h\:mm\:ss\.FFF");
+
+                Window.textRenderer.SetSize(128);
+                levelTime = Texture.LoadFromBmp(Window.textRenderer.RenderString(timestring, Color.White), "levelTime", false);
+
+                Globals.activeButtons.Add(
+                    new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 - 120, buttonWidth, 50, 1, "Pixel", "Next Level", Vector4.One, Vector3.Zero, TextAlignment.CENTER, true, () => { StartGame(++Globals.currentLevel); })
+                    );
+            }
 
             Globals.activeButtons.Add(
                 new Button(Window.WindowSize.X / 2 - 50, Window.WindowSize.Y / 2 - 60, 80, 50, 1, "Pixel", "<", Vector4.One, Vector3.Zero, TextAlignment.CENTER, true, () => { LevelList(--currentLevelList); })

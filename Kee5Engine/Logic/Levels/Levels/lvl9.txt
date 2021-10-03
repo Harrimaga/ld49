@@ -1,0 +1,21 @@
+﻿30
+19
+H                            H
+H   C                        H
+H############################H
+H        H                   H
+H   1    H                   H
+H###S####################   #H
+H         U         HHHH     H
+HC       LDR                 H
+H###    #####HH#####^^^^#####H
+H              S             H
+H             CS             H
+H    ############FF##FF#####HH
+H  C                H        H
+H  U             L  H        H
+H^^^^IIIIIIIII#############  H
+H                            H
+H 0  R    C                U H
+HSSS      #       C         #H
+H      HHFFFHHHHHHHHHHH##    H
