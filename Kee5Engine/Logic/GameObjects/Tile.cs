@@ -27,7 +27,7 @@ namespace Kee5Engine
             }
             else
             {
-                sprite = new Sprite(t, Globals.tileSize, Globals.tileSize, position.X, position.Y, 1, 0, new Vector4(0, 1, 1, 1));
+                sprite = new Sprite(t, Globals.tileSize, Globals.tileSize, position.X, position.Y, 1, 0, new Vector4(1, 1, 1, 1));
             }
         }
 
@@ -67,7 +67,7 @@ namespace Kee5Engine
 
     public class LevelEndTile : Tile
     {
-        public LevelEndTile(Vector2 position) : base(position, false, true, Window.textures.GetTexture("Pixel"))
+        public LevelEndTile(Vector2 position) : base(position, false, true, Window.textures.GetTexture("EndTile"))
         {
 
         }
@@ -89,7 +89,7 @@ namespace Kee5Engine
         private double stoodOnTime = 0;
         private bool stoodOn = false;
         private Vector2 velocity = new Vector2(0, 0);
-        public UnstableTile(Vector2 position) : base(position, true, true, Window.textures.GetTexture("BasicSolid"))
+        public UnstableTile(Vector2 position) : base(position, true, true, Window.textures.GetTexture("UnstableTile"))
         {
 
         }
@@ -143,9 +143,9 @@ namespace Kee5Engine
 
     public class SpikeTile : Tile
     {
-        public SpikeTile(Vector2 position) : base(position, true, true, Window.textures.GetTexture("Pixel"))
+        public SpikeTile(Vector2 position) : base(position, true, true, Window.textures.GetTexture("SpikeTile"))
         {
-            sprite.color = new Vector4(0.2f, 0.2f, 0.2f, 1);
+            
         }
     }
 
@@ -159,7 +159,7 @@ namespace Kee5Engine
 
     public class FakeSolid : Tile
     {
-        public FakeSolid(Vector2 position) : base(position, false, true, Window.textures.GetTexture("BasicSolid"))
+        public FakeSolid(Vector2 position) : base(position, false, true, Window.textures.GetTexture("SafeTile"))
         {
             sprite.color = new Vector4(1, 1, 1, 1);
         }
@@ -168,7 +168,7 @@ namespace Kee5Engine
     public class Collectable : Tile
     {
         
-        public Collectable(Vector2 position) : base(position, false, true, Window.textures.GetTexture("Pixel"))
+        public Collectable(Vector2 position) : base(position, false, true, Window.textures.GetTexture("KeyTile"))
         {
             
         }

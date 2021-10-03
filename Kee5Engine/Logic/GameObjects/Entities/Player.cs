@@ -13,7 +13,7 @@ namespace Kee5Engine
         private double dashTimer = 0;
 
         public Player(Vector2 position, Texture tex) : base(position, new Vector2(Globals.tileSize, Globals.tileSize),
-            new Sprite(tex, Globals.tileSize, Globals.tileSize, position.X, position.Y, 5, 0, Vector4.One, 4, 0.2f))
+            new Sprite(tex, Globals.tileSize, Globals.tileSize, position.X, position.Y, 5, 0, Vector4.One, 6, 0.1f))
         {
 
         }
@@ -94,12 +94,19 @@ namespace Kee5Engine
 
         public void InputHandling()
         {
+            if (Window.inputHandler.IsKeyPressed(Keys.R))
+            {
+                Globals.level = new Level();
+                Globals.activeButtons.Clear();
+                Globals.gameState = GameState.PLAYING;
+            }
             if (dashTimer > 0)
             {
                 dashTimer -= Globals.deltaTime;
 
                 if (dashTimer <= 0)
                 {
+                    sprite.color = new Vector4(1, 1, 1, 1);
                     velocity.Y = Math.Max(velocity.Y, -Balance.maxSpeed);
                     velocity.X = Math.Clamp(velocity.X, -Balance.maxSpeed, Balance.maxSpeed);
                 }
@@ -147,6 +154,7 @@ namespace Kee5Engine
             if (velocity != Vector2.Zero && (Window.inputHandler.IsKeyPressed(Keys.LeftShift) || Window.inputHandler.IsButtonPressed(ControllerKeys.B)) && canDash)
             {
                 velocity = Vector2.NormalizeFast(velocity) * Balance.dashSpeed;
+                sprite.color = new Vector4(0, 0.5f, 0.8f, 1);
 
                 dashTimer = Balance.dashTime;
                 canDash = false;

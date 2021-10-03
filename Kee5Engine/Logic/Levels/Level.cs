@@ -105,13 +105,13 @@ namespace Kee5Engine
                             break;
                         case '0':
                             grid[x, y] = null;
-                            player = new Player(new Vector2(Globals.tileSize * x, Globals.tileSize * y), Window.textures.GetTexture("PlayerIdle"));
+                            player = new Player(new Vector2(Globals.tileSize * x, Globals.tileSize * y), Window.textures.GetTexture("Player"));
                             break;
                         case '1':
                             grid[x, y] = new LevelEndTile(new Vector2(x * Globals.tileSize, y * Globals.tileSize));
                             break;
                         case 'S':
-                            grid[x, y] = new Tile(new Vector2(x * Globals.tileSize, y * Globals.tileSize), true, true, Window.textures.GetTexture("BasicSolid"));
+                            grid[x, y] = new Tile(new Vector2(x * Globals.tileSize, y * Globals.tileSize), true, true, Window.textures.GetTexture("SafeTile"));
                             break;
                         case 'I':
                             grid[x, y] = new IceTile(new Vector2(x * Globals.tileSize, y * Globals.tileSize));
