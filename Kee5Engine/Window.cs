@@ -139,9 +139,13 @@ namespace Kee5Engine
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             // Increment the total elapsed time
-            timeElapsed += args.Time;
-
             Globals.deltaTime = args.Time;
+            if (Globals.deltaTime > 0.05)
+            {
+                Globals.deltaTime = 0.05;
+            }
+            timeElapsed += Globals.deltaTime;
+
 
             // Return if the window isn't focussed
             // If running with break points, disable this, or this will always return

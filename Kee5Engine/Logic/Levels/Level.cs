@@ -11,10 +11,10 @@ namespace Kee5Engine
         protected Player player;
         private List<Tile> removables;
         public float tileDeathPlane, entityDeathPlane;
+        private BackgroundHandler background;
 
         private int collectablesNeeded;
 
-        private Sprite background;
         private double time;
 
         public Level()
@@ -24,13 +24,13 @@ namespace Kee5Engine
             time = 0;
             tileDeathPlane = (grid.GetLength(1) + 10) * Globals.tileSize;
             entityDeathPlane = (grid.GetLength(1) + 10) * Globals.tileSize;
-            background = new Sprite(Window.textures.GetTexture("Pixel"), Window.WindowSize.X, Window.WindowSize.Y, Window.WindowSize.X / 2, Window.WindowSize.Y / 2, 0, 0, new Vector4(0.61f, 0.84f, 0.87f, 1));
+            background = new BackgroundHandler();
         }
 
         public bool CollidesWithMap(Entity e, out Tile collission)
         {
-            Vector2 beginPos = new Vector2((float)Math.Floor(e.position.X/Globals.tileSize), (float)Math.Floor(e.position.Y / Globals.tileSize));
-            Vector2 amountToCheck = new Vector2((float)Math.Floor(2 + e.size.X  /  Globals.tileSize), (float)Math.Floor(2 + e.size.Y / Globals.tileSize));
+            Vector2 beginPos = new Vector2((float)Math.Floor(e.position.X / Globals.tileSize), (float)Math.Floor(e.position.Y / Globals.tileSize));
+            Vector2 amountToCheck = new Vector2((float)Math.Floor(2 + e.size.X / Globals.tileSize), (float)Math.Floor(2 + e.size.Y / Globals.tileSize));
             for (int i = (int)beginPos.X; i < beginPos.X + amountToCheck.X; i++)
             {
                 for (int j = (int)beginPos.Y; j < beginPos.Y + amountToCheck.Y; j++)
@@ -95,7 +95,7 @@ namespace Kee5Engine
                 for (int x = 0; x < line.Length; x++)
                 {
                     char c = line[x];
-                    switch(c)
+                    switch (c)
                     {
                         case ' ':
                             grid[x, y] = null;
@@ -140,8 +140,6 @@ namespace Kee5Engine
 
         public void Draw()
         {
-            background.posX = player.position.X;
-            background.posY = player.position.Y;
             background.Draw();
             for (int x = 0; x < grid.GetLength(0); x++)
             {
@@ -173,6 +171,7 @@ namespace Kee5Engine
             }
 
             player.Update();
+            background.Update();
         }
 
         public void deleteTile(Tile tile)

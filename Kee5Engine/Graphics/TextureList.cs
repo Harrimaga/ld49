@@ -24,12 +24,21 @@ namespace Kee5Engine
         /// </summary>
         public void init()
         {
+            // Test Sprites
             LoadTexture("Sprites/Test/Test.png", "Test");
             LoadTexture("Sprites/Test/Pixel.png", "Pixel");
             LoadTexture("Sprites/Test/PlayerIdle.png", "PlayerIdle");
 
+            // Tiles
             LoadTexture("Sprites/Tiles/IceTiles.png", "IceTile");
             LoadTexture("Sprites/Tiles/BasicWall.png", "BasicSolid");
+
+            // Backgrounds
+            LoadTexture("Sprites/Background/Background1.png", "Background1");
+            LoadTexture("Sprites/Background/Background2.png", "Background2");
+            LoadTexture("Sprites/Background/Background3.png", "Background3");
+            LoadTexture("Sprites/Background/Background4.png", "Background4");
+            LoadTexture("Sprites/Background/Background5.png", "Background5");
         }
 
         /// <summary>
