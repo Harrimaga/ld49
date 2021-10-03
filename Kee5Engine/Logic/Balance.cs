@@ -21,6 +21,6 @@ namespace Kee5Engine
         public const float iceResistanceFactor = 0.1f;
 
         // Level order
-        public static readonly string[] levels = { "Tut1", "Tut2", "lvl1", "lvl2", "lvl3", "lvl4", "lvl5", "lvl6", "lvl7", "lvl8", "lvl9" };
+        public static readonly string[] levels = { "Tut1", "Tut2", "lvl1", "lvl2", "lvl3", "lvl4", "lvl5", "lvl6", "lvl7", "lvl8", "lvl9", "lvl10" };
     }
 }

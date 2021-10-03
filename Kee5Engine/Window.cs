@@ -91,7 +91,7 @@ namespace Kee5Engine
 
             Globals.mainMenu = new MainMenu();
             Globals.mainMenu.isFullScreen = IsFullscreen;
-            Globals.levelsUnlocked = 11;
+            Globals.levelsUnlocked = 12;
             Globals.gameState = GameState.MENU;
 
             base.OnLoad();
