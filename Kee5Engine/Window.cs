@@ -161,9 +161,6 @@ namespace Kee5Engine
             // Call Globals' update, this updates the active Buttons as well as the AudioManager
             Globals.Update();
 
-            // Update the Camera
-            camera.Update(args.Time);
-
             // Check if the Escape button is pressed
             //if (inputHandler.IsKeyPressed(Keys.Escape))
             //{
@@ -189,6 +186,7 @@ namespace Kee5Engine
                 if (Globals.activeButtons[i].IsInButton(MousePosition.X / screenScaleX, MousePosition.Y / screenScaleY))
                 {
                     Globals.activeButtons[i].OnClick();
+                    return;
                 }
             }
             base.OnMouseDown(e);
