@@ -143,6 +143,18 @@
     <None Update="Sprites\Test\Test.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Sprites\Tiles\ArrowD.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sprites\Tiles\ArrowL.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sprites\Tiles\ArrowR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sprites\Tiles\ArrowU.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Sprites\Tiles\BasicWall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

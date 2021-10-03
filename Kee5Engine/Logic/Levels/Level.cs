@@ -1,6 +1,7 @@
 ﻿using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace Kee5Engine
@@ -12,6 +13,7 @@ namespace Kee5Engine
         private List<Tile> removables;
         public float tileDeathPlane, entityDeathPlane;
         private BackgroundHandler background;
+        protected List<Sprite> textSprites;
 
         private int collectablesNeeded;
 
@@ -19,6 +21,7 @@ namespace Kee5Engine
 
         public Level()
         {
+            textSprites = new List<Sprite>();
             LoadLevel($"Logic/Levels/Levels/{Balance.levels[Globals.currentLevel]}.txt");
             removables = new List<Tile>();
             time = 0;
@@ -83,13 +86,15 @@ namespace Kee5Engine
             System.IO.StreamReader file =
                 new System.IO.StreamReader(path);
 
+            List<Vector2> texts = new List<Vector2>();
+
             int width = int.Parse(file.ReadLine());
             int height = int.Parse(file.ReadLine());
 
             grid = new Tile[width, height];
 
             int y = 0;
-            while ((line = file.ReadLine()) != null)
+            while (y < height && (line = file.ReadLine()) != null)
             {
 
                 for (int x = 0; x < line.Length; x++)
@@ -129,9 +134,37 @@ namespace Kee5Engine
                             grid[x, y] = new Collectable(new Vector2(x * Globals.tileSize, y * Globals.tileSize));
                             collectablesNeeded++;
                             break;
+                        case 'T':
+                            texts.Add(new Vector2(x, y));
+                            break;
+                        case 'L':
+                            grid[x, y] = new Arrow(new Vector2(x * Globals.tileSize, y * Globals.tileSize), "ArrowLeft");
+                            break;
+                        case 'R':
+                            grid[x, y] = new Arrow(new Vector2(x * Globals.tileSize, y * Globals.tileSize), "ArrowRight");
+                            break;
+                        case 'D':
+                            grid[x, y] = new Arrow(new Vector2(x * Globals.tileSize, y * Globals.tileSize), "ArrowDown");
+                            break;
+                        case 'U':
+                            grid[x, y] = new Arrow(new Vector2(x * Globals.tileSize, y * Globals.tileSize), "ArrowUp");
+                            break;
                     }
                 }
                 y++;
+            }
+
+            int i = 0;
+            while ((line = file.ReadLine()) != null)
+            {
+                Window.textRenderer.SetSize(32);
+                Texture text = Texture.LoadFromBmp(
+                    Window.textRenderer.RenderString(line, Color.Black),
+                    "TutText",
+                    false
+                    );
+                textSprites.Add(new Sprite(text, text.Size.X, text.Size.Y, texts[i].X * Globals.tileSize, texts[i].Y * Globals.tileSize, 9, 0, Vector4.One));
+                i++;
             }
 
             file.Close();
@@ -150,6 +183,11 @@ namespace Kee5Engine
                 }
             }
             player.Draw();
+
+            foreach (Sprite text in textSprites)
+            {
+                text.Draw();
+            }
         }
 
         public void Update()

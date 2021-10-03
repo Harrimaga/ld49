@@ -1,24 +1,30 @@
-﻿65
+﻿62
 22
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                                                               H
-H                       SS                                      H
-H0                                                             1H
- SSSSSSSS  SSSSSSS             SSSS   ######S              ####S 
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H                                                            H
+H T                        R                                 H
+H      T       T        SS             T        T           TH
+H0                                            R             1H
+ SSSSSSSS  SSSSSSS             SSSS   ######S           ####S 
+Move with WASD or the left controller stick
+Jump with SPACE or A (controller)
+You can double jump by pressing the jump button twice!
+Fragile blocks are unstable and will fall down
+You can dash using Left Shift or B (controller) to clear long distances
+This is the Exit, press E or Y (controller) to finish the level

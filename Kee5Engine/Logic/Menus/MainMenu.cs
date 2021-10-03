@@ -14,16 +14,15 @@ namespace Kee5Engine
         public List<Button> levels, activeLevelButtons;
         public int currentLevelList;
 
-        private int levelsPerList = 5;
+        private int levelsPerList = 5, buttonWidth = 260;
 
         public MainMenu()
         {
-            start = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2, 240, 50, 1, "Pixel", "Start Game", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { StartGame(); });
-            selectLevel = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 60, 240, 50, 1, "Pixel", "Select Level", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { OpenLevelSelect(); });
+            start = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2, buttonWidth, 50, 1, "Pixel", "Start Game", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { StartGame(); });
+            selectLevel = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 60, buttonWidth, 50, 1, "Pixel", "Select Level", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { OpenLevelSelect(); });
 
-            string fs = (isFullScreen ? "ON" : "OFF");
-            fullScreen = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 120, 240, 50, 1, "Pixel", $"Fullscreen {fs}", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { ToggleFullscreen(); });
-            quit = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y - 100, 240, 50, 1, "Pixel", "Quit Game", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { Game.gameWindow.Close(); });
+            fullScreen = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 120, buttonWidth, 50, 1, "Pixel", "Toggle Fullscreen", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { ToggleFullscreen(); });
+            quit = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y - 100, buttonWidth, 50, 1, "Pixel", "Quit Game", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { Game.gameWindow.Close(); });
 
             levels = new List<Button>();
             activeLevelButtons = new List<Button>();

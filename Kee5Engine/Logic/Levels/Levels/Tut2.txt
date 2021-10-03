@@ -3,8 +3,8 @@
 H                                                               H
 H                                                               H
 H                        H########                              H
-H                                                               H
-H                                C                              H
+H                                     T                         H
+H                        T       C                              H
 H                       ^^IIIIIIIIIIIIISSSS          C          H
 H                                                   SFF         H
 H                           ^^^^^^^^^^^                ###      H
@@ -18,7 +18,12 @@ H                                                               H
 H                                   C                           H
 H                                  ######                       H
 H                                                          #   #H
-H                    SSSSSSF                                    H
-H              ##                                               H
+H     T              SSSSSSF                                    H
+H        T     ##                                               H
 H0    1  C                                                     CH
- SSSSSSSS##                                            SSSSSSSSS 
+ SSSSSSSS##                T                           SSSSSSSSS 
+Ice will make you slide a lot!
+Don't stand on spikes or you will have to start over
+You will need keys to finish this level
+Try to collect 5 of these in this level
+Some blocks might not be safe after all :)

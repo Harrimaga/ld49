@@ -38,6 +38,10 @@ namespace Kee5Engine
             LoadTexture("Sprites/Tiles/SafeTile.png", "SafeTile");
             LoadTexture("Sprites/Tiles/Spike.png", "SpikeTile");
             LoadTexture("Sprites/Tiles/UnstableTile.png", "UnstableTile");
+            LoadTexture("Sprites/Tiles/ArrowR.png", "ArrowRight");
+            LoadTexture("Sprites/Tiles/ArrowL.png", "ArrowLeft");
+            LoadTexture("Sprites/Tiles/ArrowD.png", "ArrowDown");
+            LoadTexture("Sprites/Tiles/ArrowU.png", "ArrowUp");
 
             // Backgrounds
             LoadTexture("Sprites/Background/Background1.png", "Background1");

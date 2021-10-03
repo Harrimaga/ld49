@@ -149,6 +149,14 @@ namespace Kee5Engine
         }
     }
 
+    public class Arrow : Tile
+    {
+        public Arrow(Vector2 position, string texture) : base(position, false, true, Window.textures.GetTexture(texture))
+        {
+
+        }
+    }
+
     public class HiddenSolid : Tile
     {
         public HiddenSolid(Vector2 position) : base(position, true, false, Window.textures.GetTexture("Pixel"))
