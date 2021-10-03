@@ -96,8 +96,8 @@ namespace Kee5Engine
         {
             if (Window.inputHandler.IsKeyPressed(Keys.R) || Window.inputHandler.IsButtonPressed(ControllerKeys.SELECT))
             {
-                Globals.level = new Level();
                 Globals.activeButtons.Clear();
+                Globals.level = new Level();
                 Globals.gameState = GameState.PLAYING;
             }
 

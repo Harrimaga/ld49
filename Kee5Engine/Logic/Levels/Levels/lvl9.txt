@@ -2,11 +2,11 @@
 19
 H                            H
 H   C                        H
-H############################H
+H#########IIIIIIII###  ######H
 H        H                   H
 H   1    H                   H
 H###S####################   #H
-H         U         HHHH     H
+H         U                  H
 HC       LDR                 H
 H###    #####HH#####^^^^#####H
 H              S             H
