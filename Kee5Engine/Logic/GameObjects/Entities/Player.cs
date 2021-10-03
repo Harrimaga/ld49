@@ -122,11 +122,11 @@ namespace Kee5Engine
                 velocity.Y -= Balance.gravity * 0.35f * (float)Globals.deltaTime;
             }
 
-            if (Window.inputHandler.IsKeyDown(Keys.D) || Window.inputHandler.IsKeyDown(Keys.Right) || Window.inputHandler.IsLeftStickAngle(ControllerAngle.RIGHT))
+            if (Window.inputHandler.IsKeyDown(Keys.D) || Window.inputHandler.IsKeyDown(Keys.Right) || Window.inputHandler.IsLeftStickAngle(ControllerAngle.RIGHT) || Window.inputHandler.IsButtonDown(ControllerKeys.RIGHT))
             {
                 velocity.X = (float)Math.Min(velocity.X + Balance.speed * Globals.deltaTime * (1 + 2 * (Balance.maxSpeed - velocity.X) / Balance.maxSpeed), Balance.maxSpeed);
             }
-            else if (Window.inputHandler.IsKeyDown(Keys.A) || Window.inputHandler.IsKeyDown(Keys.Left) || Window.inputHandler.IsLeftStickAngle(ControllerAngle.LEFT))
+            else if (Window.inputHandler.IsKeyDown(Keys.A) || Window.inputHandler.IsKeyDown(Keys.Left) || Window.inputHandler.IsLeftStickAngle(ControllerAngle.LEFT) || Window.inputHandler.IsButtonDown(ControllerKeys.LEFT))
             {
                 velocity.X = (float)Math.Max(velocity.X - Balance.speed * Globals.deltaTime * (1 + 2 * (Balance.maxSpeed + velocity.X) / Balance.maxSpeed), -Balance.maxSpeed);
 
