@@ -62,13 +62,13 @@ namespace Kee5Engine
         {
             if (i < 0)
             {
-                i++;
+                currentLevelList++;
                 return;
             }
 
             if (i > (int)Math.Floor((double)(Globals.levelsUnlocked - 1) / (float)levelsPerList))
             {
-                i--;
+                currentLevelList--;
                 return;
             }
 
@@ -104,31 +104,23 @@ namespace Kee5Engine
                 levelTime = Texture.LoadFromBmp(Window.textRenderer.RenderString(timestring, Color.White), "levelTime", false);
             }
 
-            //for (int i = 0; i < Globals.levelsUnlocked; i++)
-            //{
-            //    int level = i;
-            //    levels.Add(
-            //        new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2, 200, 50, 1, "Pixel", Balance.levels[level], Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { StartGame(level); })
-            //        );
-            //}
-
-            LevelList(0);
-
             Globals.activeButtons.Add(
-                new Button(Window.WindowSize.X / 2 - 50, Window.WindowSize.Y - 200, 80, 50, 1, "Pixel", "<", Vector4.One, Vector3.Zero, TextAlignment.CENTER, true, () => { LevelList(--currentLevelList); })
-                );
-
-            Globals.activeButtons.Add(
-                new Button(Window.WindowSize.X / 2 + 50, Window.WindowSize.Y - 200, 80, 50, 1, "Pixel", ">", Vector4.One, Vector3.Zero, TextAlignment.CENTER, true, () => { LevelList(++currentLevelList); })
-                );
-
-            Globals.activeButtons.Add(
-                new Button(Window.WindowSize.X / 2, Window.WindowSize.Y - 100, 200, 50, 1, "Pixel", "Main Menu", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => {
+                new Button(Window.WindowSize.X / 2, 300, 200, 50, 1, "Pixel", "Main Menu", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => {
                     Globals.activeButtons.Clear();
                     Globals.gameState = GameState.MENU;
                     Globals.mainMenu = new MainMenu();
-                }) 
+                })
                 );
+
+            Globals.activeButtons.Add(
+                new Button(Window.WindowSize.X / 2 - 50, Window.WindowSize.Y / 2 - 60, 80, 50, 1, "Pixel", "<", Vector4.One, Vector3.Zero, TextAlignment.CENTER, true, () => { LevelList(--currentLevelList); })
+                );
+
+            Globals.activeButtons.Add(
+                new Button(Window.WindowSize.X / 2 + 50, Window.WindowSize.Y / 2 - 60, 80, 50, 1, "Pixel", ">", Vector4.One, Vector3.Zero, TextAlignment.CENTER, true, () => { LevelList(++currentLevelList); })
+                );
+
+            LevelList(0);
 
             Globals.ActivateButtons();
         }
