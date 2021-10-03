@@ -196,8 +196,12 @@ namespace Kee5Engine
         protected override void OnResize(ResizeEventArgs e)
         {
             // Call GL.viewport to resize OpenGL's viewport to match the new size
-            GL.Viewport(0, 0, Size.X, Size.Y);
-            camera.AspectRatio = Size.X / (float)Size.Y;
+            GL.Viewport(0, 0, e.Width, e.Height);
+            camera.AspectRatio = e.Width / (float)e.Height;
+
+            screenScaleX = e.Width / 1920.0f;
+            screenScaleY = e.Height / 1080.0f;
+
             base.OnResize(e);
         }
 
