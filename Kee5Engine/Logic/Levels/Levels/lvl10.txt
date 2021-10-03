@@ -1,0 +1,17 @@
+﻿100
+15
+H                               S                                                                  H
+H                               S                                                                  H
+H                               S                                                                  H
+H                               S                                                                  H
+H                               S                                                                  H
+H                               S                                                                  H
+H                               S                                                                  H
+H                               S                                                                  H
+H                               S                                                                  H
+H                               S                                                                  H
+H                               S                                                                  H
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS                                                                  H
+S0   C     C     C     C     C     C    R                C  R               C  R               1   H
+SS#    ##    ##    ##    ##    ##    ###                 ##                 ##                 ##  H
+H  ^^^^  ^^^^  ^^^^  ^^^^  ^^^^  ^^^^                                                              H
