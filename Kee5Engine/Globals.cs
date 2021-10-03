@@ -89,6 +89,8 @@ namespace Kee5Engine
 
                     break;
             }
+
+            Window.camera.Update(deltaTime);
             foreach (Button button in activeButtons)
             {
                 button.Update();

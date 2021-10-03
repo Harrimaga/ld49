@@ -18,6 +18,7 @@ namespace Kee5Engine
 
         public MainMenu()
         {
+            Globals.activeButtons.Clear();
             start = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2, buttonWidth, 50, 1, "Pixel", "Start Game", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { StartGame(); });
             selectLevel = new Button(Window.WindowSize.X / 2, Window.WindowSize.Y / 2 + 60, buttonWidth, 50, 1, "Pixel", "Select Level", Vector4.One, new Vector3(0, 0, 0), TextAlignment.CENTER, true, () => { OpenLevelSelect(); });
 
@@ -38,8 +39,8 @@ namespace Kee5Engine
         public void StartGame(int i = 0)
         {
             Globals.currentLevel = i;
-            Globals.level = new Level();
             Globals.activeButtons.Clear();
+            Globals.level = new Level();
             Globals.gameState = GameState.PLAYING;
         }
 

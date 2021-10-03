@@ -16,6 +16,8 @@ namespace Kee5Engine
         protected List<Sprite> textSprites;
 
         private int collectablesNeeded;
+        private int totalCollectablesInLevel;
+        private Button keyCounterSprite, keyCounterAmount;
 
         private double time;
 
@@ -28,6 +30,15 @@ namespace Kee5Engine
             tileDeathPlane = (grid.GetLength(1) + 10) * Globals.tileSize;
             entityDeathPlane = (grid.GetLength(1) + 10) * Globals.tileSize;
             background = new BackgroundHandler();
+
+            keyCounterSprite = new Button(35, 40, 64, 64, 7, "KeyTile", Vector4.One, true, () => { });
+
+            string text = $"{totalCollectablesInLevel - collectablesNeeded}/{totalCollectablesInLevel}";
+
+            keyCounterAmount = new Button(100, 40, 200, 64, 7, text, (collectablesNeeded == 0 ? new Vector3(0, 1, 0) : Vector3.Zero), TextAlignment.CENTER, true, () => { });
+
+            Globals.activeButtons.Add(keyCounterSprite);
+            Globals.activeButtons.Add(keyCounterAmount);
         }
 
         public bool CollidesWithMap(Entity e, out Tile collission)
@@ -51,7 +62,12 @@ namespace Kee5Engine
 
         public int AddCollectable()
         {
-            return collectablesNeeded--;
+            collectablesNeeded--;
+            string text = $"{totalCollectablesInLevel - collectablesNeeded}/{totalCollectablesInLevel}";
+            Globals.activeButtons.Remove(keyCounterAmount);
+            keyCounterAmount = new Button(100, 40, 200, 64, 7, text, (collectablesNeeded == 0 ? new Vector3(0, 1, 0) : Vector3.Zero), TextAlignment.CENTER, true, () => { });
+            Globals.activeButtons.Add(keyCounterAmount);
+            return collectablesNeeded;
         }
 
         public bool CanEnd()
@@ -153,6 +169,8 @@ namespace Kee5Engine
                 }
                 y++;
             }
+
+            totalCollectablesInLevel = collectablesNeeded;
 
             int i = 0;
             while ((line = file.ReadLine()) != null)
