@@ -11,9 +11,9 @@ namespace Kee5Engine
         public const int maxSpeed = 1000;
         public const int gravity = 3000;
         public const int baseResistance = 10;
-        public const int jumpSpeed = 1000;
+        public const int jumpSpeed = 1100;
         public const int dashSpeed = 3000;
-        public const double dashTime = 0.2;
+        public const double dashTime = 0.15;
 
         // Tile stats
         public const double decayTime = 0.5;
@@ -21,6 +21,6 @@ namespace Kee5Engine
         public const float iceResistanceFactor = 0.1f;
 
         // Level order
-        public static readonly string[] levels = { "Tut1", "Tut2", "TestLevel" };
+        public static readonly string[] levels = { "Tut1", "Tut2", "lvl1" };
     }
 }
