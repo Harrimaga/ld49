@@ -31,7 +31,9 @@ namespace Kee5Engine
 
             // Tiles
             LoadTexture("Sprites/Tiles/IceTiles.png", "IceTile");
-            LoadTexture("Sprites/Tiles/BasicWall.png", "BasicSolid");
+            LoadTexture("Sprites/Tiles/SafeTile.png", "SafeTile");
+            LoadTexture("Sprites/Tiles/Spike.png", "SpikeTile");
+            LoadTexture("Sprites/Tiles/UnstableTile.png", "UnstableTile");
 
             // Backgrounds
             LoadTexture("Sprites/Background/Background1.png", "Background1");
