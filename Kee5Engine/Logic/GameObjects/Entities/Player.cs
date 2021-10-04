@@ -1,4 +1,5 @@
-﻿using Kee5Engine.IO;
+﻿using Kee5Engine.Audio;
+using Kee5Engine.IO;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
@@ -11,6 +12,9 @@ namespace Kee5Engine
     {
         private bool doubleJumped = false, onGround = false, canDash = true;
         private double dashTimer = 0;
+        private Random rng = new Random();
+
+        private readonly string[] sfxs = { "A3", "B3", "C3", "D3", "E3", "F3", "G3" };
 
         public Player(Vector2 position, Texture tex) : base(position, new Vector2(Globals.tileSize, Globals.tileSize),
             new Sprite(tex, Globals.tileSize, Globals.tileSize, position.X, position.Y, 5, 0, Vector4.One, 6, 0.1f))
@@ -86,8 +90,15 @@ namespace Kee5Engine
             sprite.Update(Globals.deltaTime);
         }
 
+        private void playJumpSFX()
+        {
+            string sfx = sfxs[rng.Next(sfxs.Length)];
+            AudioManager.PlaySFX($"Audio/SFX/{sfx}.wav");
+        }
+
         public void GameOver()
         {
+            AudioManager.PlaySFX("Audio/SFX/Death.wav");
             Globals.gameState = GameState.LOST;
             Globals.gameOverMenu = new GameOverMenu();
             Globals.deathCount++;
@@ -128,11 +139,13 @@ namespace Kee5Engine
             if ((Window.inputHandler.IsKeyPressed(Keys.Space) || Window.inputHandler.IsButtonPressed(ControllerKeys.A)) && onGround)
             {
                 velocity.Y = -Balance.jumpSpeed;
+                playJumpSFX();
             }
             else if ((Window.inputHandler.IsKeyPressed(Keys.Space) || Window.inputHandler.IsButtonPressed(ControllerKeys.A)) && !doubleJumped)
             {
                 velocity.Y = -Balance.jumpSpeed;
                 doubleJumped = true;
+                playJumpSFX();
             }
 
             if ((Window.inputHandler.IsKeyDown(Keys.Space) || Window.inputHandler.IsButtonPressed(ControllerKeys.A)) && velocity.Y < 0)

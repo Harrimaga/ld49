@@ -13,6 +13,7 @@ namespace Kee5Engine.Audio
     {
         private static WaveOut music = null;
         private static List<WaveOut> sfxs = new List<WaveOut>();
+        private static float volume = 0.05f;
 
         /// <summary>
         /// Play music file from path
@@ -31,6 +32,12 @@ namespace Kee5Engine.Audio
             music.Init(m);
             music.Play();
         }
+
+        public static void SetVolume(float volume)
+        {
+            music.Volume = volume;
+        }
+
 
         /// <summary>
         /// Play sound effect from path

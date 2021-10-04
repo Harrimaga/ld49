@@ -31,6 +31,8 @@ namespace Kee5Engine
             entityDeathPlane = (grid.GetLength(1) + 10) * Globals.tileSize;
             background = new BackgroundHandler();
 
+            Game.gameWindow.CursorVisible = false;
+
             keyCounterSprite = new Button(35, 40, 64, 64, 7, "KeyTile", Vector4.One, true, () => { });
 
             string text = $"{totalCollectablesInLevel - collectablesNeeded}/{totalCollectablesInLevel}";

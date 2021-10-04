@@ -1,4 +1,5 @@
-﻿using OpenTK.Mathematics;
+﻿using Kee5Engine.Audio;
+using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
@@ -77,6 +78,7 @@ namespace Kee5Engine
             if (CollidesEnd(Globals.level.GetPlayerPos(), Globals.level.GetPlayerSize()) && (Window.inputHandler.IsKeyPressed(Keys.E) || Window.inputHandler.IsButtonPressed(IO.ControllerKeys.Y)) && Globals.level.CanEnd())
             {
                 // End level
+                AudioManager.PlaySFX("Audio/SFX/LevelEnd.wav");
                 Globals.gameState = GameState.MENU;
                 Globals.levelsUnlocked = Math.Max(Math.Min(Balance.levels.Length, Globals.currentLevel + 2), Globals.levelsUnlocked);
 
@@ -193,6 +195,7 @@ namespace Kee5Engine
         {
             if (CollidesEnd(Globals.level.GetPlayerPos(), Globals.level.GetPlayerSize()))
             {
+                AudioManager.PlaySFX("Audio/SFX/Pickup.wav");
                 Globals.level.AddCollectable();
                 Globals.level.deleteTile(this);
             }

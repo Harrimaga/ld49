@@ -97,6 +97,9 @@ namespace Kee5Engine
             Globals.mainMenu.isFullScreen = IsFullscreen;
             Globals.gameState = GameState.MENU;
 
+            AudioManager.PlayMusic("Audio/Music/gameMusic.wav");
+            AudioManager.SetVolume(0.2f);
+
             base.OnLoad();
         }
 
